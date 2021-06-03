@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#517782"
+    tools:context=".HomeActivity">
+
+    <Button
+        android:id="@+id/btnFollowing_Home"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/material_on_background_disabled"
+        android:text="For You"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.117"
+        app:layout_constraintStart_toEndOf="@+id/divider_Home"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <ImageButton
+        android:id="@+id/btnHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/abc_vector_test"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="602dp" />
+
+    <View
+        android:id="@+id/divider_Home"
+        android:layout_width="2dp"
+        android:layout_height="18dp"
+        android:background="@color/white"
+        android:clickable="false"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="204dp"
+        tools:layout_editor_absoluteY="30dp" />
+
+    <ImageButton
+        android:id="@+id/btnSearch"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/material_on_background_disabled"
+        app:srcCompat="@android:drawable/ic_menu_search"
+        tools:layout_editor_absoluteX="259dp"
+        tools:layout_editor_absoluteY="602dp" />
+
+    <Button
+        android:id="@+id/btnForYou_Home"
+        android:layout_width="159dp"
+        android:layout_height="49dp"
+        android:background="@color/material_on_background_disabled"
+        android:text="Following"
+        android:textAlignment="textEnd"
+        android:textColor="#C1C1C1"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/divider_Home"
+        app:layout_constraintHorizontal_bias="0.577"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <ImageButton
+        android:id="@+id/btnProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        tools:layout_editor_absoluteX="180dp"
+        tools:layout_editor_absoluteY="602dp"
+        tools:srcCompat="@tools:sample/avatars" />
+</androidx.constraintlayout.widget.ConstraintLayout>
