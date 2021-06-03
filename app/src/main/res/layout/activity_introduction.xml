@@ -31,7 +31,7 @@
         android:id="@+id/txtTnC_Introduction"
         android:layout_width="315dp"
         android:layout_height="21dp"
-        android:text="TextView"
+        android:text="By Continuing you agree to my Terms and Conditions"
         android:textColor="#C1C1C1"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,58 +39,60 @@
         app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSignUp_Introduction"
-        app:layout_constraintVertical_bias="0.302"
-        tools:text="By Continuing you agree to my Terms and Conditions" />
+        app:layout_constraintVertical_bias="0.302" />
 
     <Button
         android:id="@+id/btnAppleID_Introduction"
         android:layout_width="150dp"
         android:layout_height="47dp"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="40dp"
-        android:layout_marginBottom="36dp"
         android:background="#000000"
         android:text="Apple ID"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:cornerRadius="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSignUp_Introduction"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/btnGoogle_Introduction"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignInWithEmail_Introduction" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.793" />
 
     <Button
         android:id="@+id/btnGoogle_Introduction"
         android:layout_width="150dp"
         android:layout_height="47dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginTop="10dp"
         android:background="#000000"
         android:text="Google"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:cornerRadius="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSignUp_Introduction"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.183"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignInWithEmail_Introduction" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.793" />
 
     <Button
         android:id="@+id/btnSignInWithEmail_Introduction"
         android:layout_width="321dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
         android:background="#1E90FF"
         android:text="Sign in with Email"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:cornerRadius="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintHorizontal_bias="0.566"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtWelcomeMessage_Introduction" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.696" />
 
     <Button
         android:id="@+id/btnSignUp_Introduction"
@@ -103,8 +105,9 @@
         app:cornerRadius="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSignInWithEmail_Introduction"
-        app:layout_constraintVertical_bias="0.839" />
+        app:layout_constraintVertical_bias="0.727" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
