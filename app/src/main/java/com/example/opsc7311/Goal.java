@@ -10,10 +10,10 @@ public class Goal extends Group{
     public Boolean completed;
 
     void CheckCompleted(){
-        if (PercentageCompleted == 1)
+        /*if (PercentageCompleted == 1)
         {
             completed = true;
-        }
+        }*/
     }
 
     Goal(String Name, Color Color){
