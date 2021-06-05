@@ -57,10 +57,15 @@
         android:id="@+id/edtPassword_SignIn"
         android:layout_width="240dp"
         android:layout_height="39dp"
+        android:background="@drawable/edit_box"
+        android:textColorHint="#C1C1C1"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="10dp"
         android:ems="10"
         android:hint="Enter your password"
         android:inputType="textPassword"
         android:textSize="14sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -78,10 +83,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintHorizontal_bias="0.244"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.469" />
+        app:layout_constraintVertical_bias="0.451" />
 
     <TextView
         android:id="@+id/txtEmail_SignIn"
@@ -92,16 +97,17 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
+        app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.403" />
+        app:layout_constraintVertical_bias="0.387" />
 
     <Button
         android:id="@+id/btnLogin_SignIn"
         android:layout_width="240dp"
         android:layout_height="46dp"
-        android:background="#1E90FF"
+        android:background="@drawable/round_buttons"
+        android:backgroundTint="#1E90FF"
         android:text="Login"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -116,9 +122,14 @@
         android:layout_width="240dp"
         android:layout_height="39dp"
         android:layout_marginTop="80dp"
+        android:background="@drawable/edit_box"
         android:ems="10"
         android:hint="Enter your email address"
-        android:inputType="textEmailAddress"
+        android:paddingLeft="10dp"
+        android:inputType="textWebEmailAddress|textEmailAddress"
+        android:textAlignment="viewStart"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#C1C1C1"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/edtPassword_SignIn"
         app:layout_constraintEnd_toEndOf="parent"

@@ -17,4 +17,8 @@ public class HomeActivity extends MainLayout {
         SetUpConstants(findViewById((R.id.btnProfile_home)),findViewById((R.id.btnHome_home)),findViewById((R.id.btnDiscover_home)));
 
     }
+
+   void LoadContent(){
+        //take content and put on screen
+    }
 }
