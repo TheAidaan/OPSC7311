@@ -30,9 +30,9 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         SetUpConstants(findViewById((R.id.btnProfile_home)),findViewById((R.id.btnHome_home)),findViewById((R.id.btnDiscover_home)));
         _dialog = new Dialog(this);
-        Content Testcontent1 = new Content("Arobranch","A place in stellenbosch to climb a tree", R.drawable.five);
-        Content Testcontent2 = new Content("CampsBay","A place in africa to commit tax fraud", R.drawable.four);
-        Content Testcontent3 = new Content("KoelBay","A place on earth to get eaten by a shark", R.drawable.two);
+        Content Testcontent1 = new Content("Arobranch","A place in stellenbosch to climb a tree",R.mipmap.test2);
+        Content Testcontent2 = new Content("CampsBay","A place in africa to commit tax fraud", R.mipmap.test4);
+        Content Testcontent3 = new Content("KoelBay","A place on earth to get eaten by a shark", R.mipmap.test3);
         _layout = findViewById(R.id.llScroll_home);
         LoadContent(Testcontent1);
         LoadContent(Testcontent2);
@@ -73,16 +73,16 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         popup.inflate(R.menu.slider_down_menu);
         popup.show();
     }
-    void ShowDisplayPopUp(View v){
+    void ShowViewPopUp(View v){
         ImageButton btnClose;
         ImageView image;
         TextView description;
         TextView title;
-        _dialog.setContentView(R.layout.display__popup_menu);
-        btnClose = _dialog.findViewById(R.id.btnClose_display__popup_menu);
-        image = _dialog.findViewById(R.id.imgView_display__popup_menu);
-        title = _dialog.findViewById(R.id.edtTitle_display__popup_menu);
-        description = _dialog.findViewById(R.id.txtDescription_display__popup_menu);
+        _dialog.setContentView(R.layout.view_popup_menu);
+        btnClose = _dialog.findViewById(R.id.btnClose_save_popup_menu);
+        image = _dialog.findViewById(R.id.imgView_save_popup_menu);
+        title = _dialog.findViewById(R.id.edtTitle_view_popup_menu);
+        description = _dialog.findViewById(R.id.txtDescription_view_popup_menu);
 
         image.setImageResource(_currentContent.imageID);
         title.setText(_currentContent.name);
@@ -113,7 +113,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 Toast.makeText(this,"Item 2 clicked"+ _currentContent.name, Toast.LENGTH_SHORT).show();
                 return true;
             default:
-                ShowDisplayPopUp(item.getActionView());
+                ShowViewPopUp(item.getActionView());
                 return false;
 
         }
