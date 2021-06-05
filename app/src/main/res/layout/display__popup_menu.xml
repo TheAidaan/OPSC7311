@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="475dp"
+    android:padding="15dp"
+    android:layout_gravity="center"
+    android:background="@drawable/round_buttons"
+    android:backgroundTint="#333333">
+
+
+    <ImageButton
+        android:id="@+id/btnClose_display__popup_menu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/end"
+        android:layout_gravity="right"
+        android:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.519"
+        app:layout_constraintStart_toEndOf="@+id/btnProfile_home"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.883" />
+
+    <ImageView
+        android:id="@+id/imgView_display__popup_menu"
+        android:layout_width="279dp"
+        android:layout_height="210dp"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/four"></ImageView>
+
+    <TextView
+        android:id="@+id/edtTitle_display__popup_menu"
+        android:layout_width="339dp"
+        android:layout_height="62dp"
+        android:layout_gravity="center"
+        android:text="Camps Bay"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtDescription_display__popup_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

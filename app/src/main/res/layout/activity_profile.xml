@@ -22,37 +22,38 @@
         android:id="@+id/btnHome_profile"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:background="@mipmap/home"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnProfile_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.881"
-        app:srcCompat="@drawable/abc_vector_test" />
+        app:layout_constraintVertical_bias="0.881" />
 
     <ImageButton
         android:id="@+id/btnSettings_ProfilePage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/material_on_background_disabled"
+        android:background="@mipmap/cog"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.958"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        app:srcCompat="@android:drawable/ic_menu_preferences" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <ImageButton
         android:id="@+id/btnCategorySearch_ProfilePage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/material_on_background_disabled"
+        android:background="@mipmap/search"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.573"
         app:layout_constraintStart_toEndOf="@+id/txtCategories_ProfilePage"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_search" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtCategories_ProfilePage"
@@ -73,13 +74,13 @@
         android:id="@+id/btnDiscover_profile"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/material_on_background_disabled"
+        android:background="@mipmap/search"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnProfile_profile"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.881"
-        app:srcCompat="@android:drawable/ic_menu_search" />
+        app:layout_constraintVertical_bias="0.881" />
 
     <TextView
         android:id="@+id/txtHelloUser_ProfilePage"
