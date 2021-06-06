@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +22,6 @@ import java.util.List;
 public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClickListener  {
 
     RecyclerView recyclerView;
-    RecyclerAdapter adapter;
 
     String Test[] = {"one,two,three,four"};
 
@@ -37,7 +37,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         SetUpConstants(findViewById((R.id.btnProfile_home)),findViewById((R.id.btnHome_home)),findViewById((R.id.btnDiscover_home)));
         _dialog = new Dialog(this);
-        Content Testcontent1 = new Content("Arobranch","A place in stellenbosch to climb a tree",R.mipmap.test2);
+        Content Testcontent1 = new Content("Arobranch","A place in stellenbosch to climb a tree",R.mipmap.test5);
         Content Testcontent2 = new Content("CampsBay","A place in africa to commit tax fraud", R.mipmap.test2);
         Content Testcontent3 = new Content("KoelBay","A place on earth to get eaten by a shark", R.mipmap.test3);
         _layout = findViewById(R.id.llScroll_home);
@@ -48,22 +48,22 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
     }
 
    void LoadContent(Content content){
-       ConstraintLayout Mylayout = (ConstraintLayout) findViewById(R.id.mylayout);
-       ImageButton button1=new ImageButton(this);
 
-       button1.setImageResource(content.imageID);
+       ImageButton button = new ImageButton(this);
 
-       _layout.addView(button1);
+       button.setImageResource(content.imageID);
 
-       LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)button1.getLayoutParams();
+       _layout.addView(button);
+
+       LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)button.getLayoutParams();
        params.height = 900;
        params.width = 726;
 
-       button1.setBackgroundColor(517782);
-       button1.setLayoutParams(params);
-       button1.setScaleType(ImageView.ScaleType.FIT_XY);
+       button.setBackgroundColor(517782);
+       button.setLayoutParams(params);
+       button.setScaleType(ImageView.ScaleType.FIT_XY);
 
-       button1.setOnClickListener(new View.OnClickListener() {
+       button.setOnClickListener(new View.OnClickListener() {
           public void onClick(View v) {
               _currentContent = content;
               ShowSlider(v);
@@ -110,9 +110,11 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
     }
 
     void ShowSavePopUp(View v, String Todo){
+
         ImageButton btnClose;
         ImageView image;
         TextView title,todo;
+        LinearLayout scroller;
 
         _dialog.setContentView(R.layout.save_popup_menu);
 
@@ -121,10 +123,38 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         title = _dialog.findViewById(R.id.txtTitle_save_popup_menu);
         todo = _dialog.findViewById(R.id.txtTodo_save_popup_menu);
 
-        recyclerView = _dialog.findViewById(R.id.rclOptions_savePopup);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerAdapter(this, Test);
-        recyclerView.setAdapter(adapter);
+        scroller = _dialog.findViewById(R.id.llScroll_save_popup_menu);
+
+        if (Todo.equals("goal"))
+        {
+            for (Goal goal: Profile.getInstance().goals
+            ) {
+                Button button = new Button(_dialog.getContext());
+                button.setText(goal.name);
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Toast.makeText(HomeActivity.this,"added to " + todo,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                scroller.addView(button);
+
+            }
+        }else
+        {
+            for (Category category: Profile.getInstance().categories
+            ) {
+                Button button = new Button(_dialog.getContext());
+                button.setText(category.name);
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Toast.makeText(HomeActivity.this,"added to " + todo,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                scroller.addView(button);
+
+            }
+        }
+
 
         image.setImageResource(_currentContent.imageID);
         title.setText(_currentContent.name);
