@@ -57,12 +57,38 @@ public class ProfileActivity extends MainLayout {
             {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(ProfileActivity.this,"clacked",Toast.LENGTH_SHORT).show();
+                    OpenCategoryFolder(category);
                 }
             });
         }
+    }
 
+    void OpenCategoryFolder(Category category){
+        _dialog.setContentView(R.layout.open_folder);
+        LinearLayout layout =_dialog.findViewById(R.id.llScroll_open_folder);
 
+        for (Content content:
+                category.contents
+             ) {
+            ImageView image = new ImageView(this);
+            image.setImageResource(content.imageID);
+            layout.addView(image);
+        }
+
+        TextView txtDescription = _dialog.findViewById(R.id.txtDescription_open_folder);
+        txtDescription.setText(category.description);
+
+        ImageButton btnClose = _dialog.findViewById(R.id.btnClose_open_folder);
+        btnClose.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                _dialog.dismiss();
+
+            }
+        });
+
+        _dialog.show();
     }
 
     View CreateCategoryFolder(){

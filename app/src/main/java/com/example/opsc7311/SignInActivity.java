@@ -45,7 +45,9 @@ public class SignInActivity extends AppCompatActivity {
             Content Testcontent5 = new Content("N1","driver",R.mipmap.test4);
 
             Goal goal = new Goal("eastSide",  Color.valueOf(0xFFAB1E));
+            goal.contents.add(Testcontent4);
             Category category = new Category("cape town","place to go when i see it", Color.valueOf(0xBC62FF),R.mipmap.sun);
+            category.contents.add(Testcontent5);
 
             Profile.getInstance().goals.add(goal);
             Profile.getInstance().categories.add(category);
