@@ -31,7 +31,6 @@ public class IntroductionActivity extends AppCompatActivity {
             }
         });
 
-
     }
     void SignInWithEmail() {
         Intent intent = new Intent(IntroductionActivity.this, SignInActivity.class);
