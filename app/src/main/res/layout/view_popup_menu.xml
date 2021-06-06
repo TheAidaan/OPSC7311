@@ -10,7 +10,7 @@
 
 
     <ImageButton
-        android:id="@+id/btnClose_save_popup_menu"
+        android:id="@+id/btnClose_view_popup_menu"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@mipmap/end"
@@ -24,15 +24,15 @@
         app:layout_constraintVertical_bias="0.883" />
 
     <ImageView
-        android:id="@+id/imgView_save_popup_menu"
+        android:id="@+id/imgView_view_popup_menu"
         android:layout_width="279dp"
         android:layout_height="210dp"
         android:layout_gravity="center"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/four"></ImageView>
+        app:srcCompat="@mipmap/test3"></ImageView>
 
     <TextView
-        android:id="@+id/edtTitle_view_popup_menu"
+        android:id="@+id/txtTitle_view_popup_menu"
         android:layout_width="339dp"
         android:layout_height="62dp"
         android:layout_gravity="center"

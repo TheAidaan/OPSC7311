@@ -2,6 +2,8 @@ package com.example.opsc7311;
 
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -18,6 +20,11 @@ import java.util.List;
 
 public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClickListener  {
 
+    RecyclerView recyclerView;
+    RecyclerAdapter adapter;
+
+    String Test[] = {"one,two,three,four"};
+
     Content _currentContent;
     LinearLayout _layout;
     Dialog _dialog;
@@ -31,12 +38,13 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         SetUpConstants(findViewById((R.id.btnProfile_home)),findViewById((R.id.btnHome_home)),findViewById((R.id.btnDiscover_home)));
         _dialog = new Dialog(this);
         Content Testcontent1 = new Content("Arobranch","A place in stellenbosch to climb a tree",R.mipmap.test2);
-        Content Testcontent2 = new Content("CampsBay","A place in africa to commit tax fraud", R.mipmap.test4);
+        Content Testcontent2 = new Content("CampsBay","A place in africa to commit tax fraud", R.mipmap.test2);
         Content Testcontent3 = new Content("KoelBay","A place on earth to get eaten by a shark", R.mipmap.test3);
         _layout = findViewById(R.id.llScroll_home);
         LoadContent(Testcontent1);
         LoadContent(Testcontent2);
         LoadContent(Testcontent3);
+
     }
 
    void LoadContent(Content content){
@@ -78,10 +86,12 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         ImageView image;
         TextView description;
         TextView title;
+
         _dialog.setContentView(R.layout.view_popup_menu);
-        btnClose = _dialog.findViewById(R.id.btnClose_save_popup_menu);
-        image = _dialog.findViewById(R.id.imgView_save_popup_menu);
-        title = _dialog.findViewById(R.id.edtTitle_view_popup_menu);
+
+        btnClose = _dialog.findViewById(R.id.btnClose_view_popup_menu);
+        image = _dialog.findViewById(R.id.imgView_view_popup_menu);
+        title = _dialog.findViewById(R.id.txtTitle_view_popup_menu);
         description = _dialog.findViewById(R.id.txtDescription_view_popup_menu);
 
         image.setImageResource(_currentContent.imageID);
@@ -98,8 +108,37 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         _dialog.show();
 
     }
-    void ShowCategoryPopUp(View v){
 
+    void ShowSavePopUp(View v, String Todo){
+        ImageButton btnClose;
+        ImageView image;
+        TextView title,todo;
+
+        _dialog.setContentView(R.layout.save_popup_menu);
+
+        btnClose = _dialog.findViewById(R.id.btnClose_save_popup_menu);
+        image = _dialog.findViewById(R.id.imgView_save_popup_menu);
+        title = _dialog.findViewById(R.id.txtTitle_save_popup_menu);
+        todo = _dialog.findViewById(R.id.txtTodo_save_popup_menu);
+
+        recyclerView = _dialog.findViewById(R.id.rclOptions_savePopup);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new RecyclerAdapter(this, Test);
+        recyclerView.setAdapter(adapter);
+
+        image.setImageResource(_currentContent.imageID);
+        title.setText(_currentContent.name);
+        todo.setText("Select the " + Todo + " you would like to add this to");
+
+
+        btnClose.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                _dialog.dismiss();
+            }
+        });
+        _dialog.show();
     }
 
 
@@ -107,10 +146,10 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()){
             case R.id.item1://save to category
-                Toast.makeText(this,"Item 1 clicked" + _currentContent.name, Toast.LENGTH_SHORT).show();
+                ShowSavePopUp(item.getActionView(),"category");
                 return true;
             case R.id.item2://add to goal
-                Toast.makeText(this,"Item 2 clicked"+ _currentContent.name, Toast.LENGTH_SHORT).show();
+                ShowSavePopUp(item.getActionView(),"goal");
                 return true;
             default:
                 ShowViewPopUp(item.getActionView());
