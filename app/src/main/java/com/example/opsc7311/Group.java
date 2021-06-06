@@ -2,6 +2,7 @@ package com.example.opsc7311;
 
 import android.graphics.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
@@ -9,7 +10,7 @@ public class Group {
     public int numberOfItems;
     public int numberCheckedOfItems;
 
-    public List<Content> contents;
+    public List<Content> contents = new ArrayList<Content>();
 
     public Color color;
 

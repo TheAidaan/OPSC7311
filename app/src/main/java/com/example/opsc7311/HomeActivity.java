@@ -130,11 +130,22 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Toast.makeText(HomeActivity.this,"added to " + txtTodo,Toast.LENGTH_SHORT).show();
+                        goal.contents.add(_currentContent);
                     }
                 });
                 scroller.addView(button);
 
             }
+
+            btnAdd.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v) {
+                    _dialog.dismiss();
+                    AddGoalForm();
+
+                }
+            });
         }else
         {
             for (Category category: Profile.getInstance().categories
@@ -144,11 +155,21 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Toast.makeText(HomeActivity.this,"added to " + txtTodo,Toast.LENGTH_SHORT).show();
+                        category.contents.add(_currentContent);
                     }
                 });
                 scroller.addView(button);
 
             }
+            btnAdd.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v) {
+                    _dialog.dismiss();
+                    AddCategoryForm();
+
+                }
+            });
         }
 
 
@@ -165,15 +186,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
             }
         });
 
-        btnAdd.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                _dialog.dismiss();
-                AddCategoryForm();
 
-            }
-        });
         _dialog.show();
     }
 
@@ -205,9 +218,48 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 }else if(description.equals("")){
                    Toast.makeText(HomeActivity.this,"enter a description ",Toast.LENGTH_SHORT).show();
                 }else{
-                    Category category = new Category(name,description, Color.valueOf(0x7FFF62),R.mipmap.rocket);Profile.getInstance().categories.add(category);
+                    Category category = new Category(name,description, Color.valueOf(0x7FFF62),R.mipmap.rocket);
+                    category.contents.add(_currentContent);
+                    Profile.getInstance().categories.add(category);
                    _dialog.dismiss();
                }
+            }
+        });
+
+        _dialog.show();
+
+    }
+    void AddGoalForm(){
+        //Dialog dialog = new Dialog(this);
+        _dialog.setContentView(R.layout.add_category_form);
+
+
+        EditText edtName = _dialog.findViewById(R.id.edtName_add_category_form);
+        EditText edtDescription = _dialog.findViewById(R.id.edtName_add_category_form);
+        Button btnAdd = _dialog.findViewById(R.id.btnAdd_add_category_form);
+        ImageButton btnClose = _dialog.findViewById(R.id.btnClose_add_category_popup_menu);
+
+        btnClose.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                _dialog.dismiss();
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String name = edtName.getText().toString();
+                String description = edtDescription.getText().toString();
+                if (name.equals(""))
+                {
+                    Toast.makeText(HomeActivity.this,"enter a name ",Toast.LENGTH_SHORT).show();
+                }else if(description.equals("")){
+                    Toast.makeText(HomeActivity.this,"enter a description ",Toast.LENGTH_SHORT).show();
+                }else{
+                    Category category = new Category(name,description, Color.valueOf(0x7FFF62),R.mipmap.rocket);Profile.getInstance().categories.add(category);
+                    _dialog.dismiss();
+                }
             }
         });
 
