@@ -9,19 +9,59 @@
     tools:context=".HomeActivity"
     android:id="@+id/mylayout">
 
+
+
+
     <ScrollView
         android:id="@+id/scv_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="111dp"
-        tools:layout_editor_absoluteY="198dp">
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="174dp">
 
-        <LinearLayout
-            android:id="@+id/llScroll_home"
+
+
+        <TableLayout
+            android:id="@+id/tblScroll_home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:layout_height="match_parent">
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="160dp"
+                    android:layout_height="250dp"
+                    app:srcCompat="@mipmap/test3"
+                    android:scaleType="fitXY"
+                    android:background="@drawable/main_buttons_background"/>
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView1"-->
+<!--                    android:layout_width="160dp"-->
+<!--                    android:layout_height="250dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    app:srcCompat="@mipmap/test1"-->
+<!--                    android:scaleType="fitXY"-->
+<!--/>-->
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="160dp"
+                    android:layout_height="250dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:background="@drawable/main_buttons_background"
+                    app:srcCompat="@mipmap/test1"
+                    android:padding="5dp"/>
+            </TableRow>
+
+
+        </TableLayout>
     </ScrollView>
+
 
     <Button
         android:id="@+id/btnFollowing_home"
@@ -40,42 +80,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
 
-    <ImageButton
-        android:id="@+id/btnHome_home"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@mipmap/home"
-        android:backgroundTint="@color/white"
-        android:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnProfile_home"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.883" />
-
-    <View
-        android:id="@+id/divider_home"
-        android:layout_width="2dp"
-        android:layout_height="18dp"
-        android:background="@color/white"
-        android:clickable="false"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="204dp"
-        tools:layout_editor_absoluteY="30dp" />
-
-    <ImageButton
-        android:id="@+id/btnDiscover_home"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@mipmap/search"
-        android:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.519"
-        app:layout_constraintStart_toEndOf="@+id/btnProfile_home"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.883" />
-
     <Button
         android:id="@+id/btnForYou_home"
         android:layout_width="200dp"
@@ -93,16 +97,52 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
 
-    <ImageButton
-        android:id="@+id/btnProfile_home"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:layout_width="233dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="600dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/main_buttons_background"
+        android:elevation="10dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="7dp"
+        android:paddingRight="25dp"
+        android:paddingBottom="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.883"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintEnd_toEndOf="@+id/scv_home"
+        app:layout_constraintStart_toStartOf="@+id/scv_home"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnHome_home"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@mipmap/home"
+            android:backgroundTint="@color/white" />/>
+
+        <ImageButton
+            android:id="@+id/btnProfile_home"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/btnDiscover_home"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:background="@mipmap/search"
+            android:backgroundTint="@color/white" />
+
+
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

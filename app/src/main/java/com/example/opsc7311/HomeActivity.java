@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +28,8 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
     String Test[] = {"one,two,three,four"};
 
     Content _currentContent;
-    LinearLayout _layout;
+    //LinearLayout _layout;
+    TableLayout lay;
     Dialog _dialog;
 
     List<Content> testContents;
@@ -41,39 +44,55 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         Content Testcontent1 = new Content("Arobranch","A place in stellenbosch to climb a tree",R.mipmap.test5);
         Content Testcontent2 = new Content("CampsBay","A place in africa to commit tax fraud", R.mipmap.test2);
         Content Testcontent3 = new Content("KoelBay","A place on earth to get eaten by a shark", R.mipmap.test3);
-        _layout = findViewById(R.id.llScroll_home);
-        LoadContent(Testcontent1);
-        LoadContent(Testcontent2);
-        LoadContent(Testcontent3);
+        //_layout = findViewById(R.id.llScroll_home);
+        lay = findViewById(R.id.tblScroll_home);
+
+        //TableRow row = new TableRow(this);
+
+        lay.addView(GetContent(Testcontent1,Testcontent2));
+        //LoadContent(Testcontent1);
+        //LoadContent(Testcontent2);
+        //LoadContent(Testcontent3);
 
     }
 
-   void LoadContent(Content content){
+   View GetContent(Content content1, Content content2){
+       TableRow row = new TableRow(this);
 
-       ImageButton button = new ImageButton(this);
+       ImageButton button1 = new ImageButton(this);
+       ImageButton button2 = new ImageButton(this);
 
-       button.setImageResource(content.imageID);
+       button1.setImageResource(content1.imageID);
+       button2.setImageResource(content2.imageID);
 
-       _layout.addView(button);
 
-       LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)button.getLayoutParams();
-       params.height = 900;
-       params.width = 726;
+       row.addView(button1);
+       row.addView(button2);
 
-       button.setBackgroundColor(517782);
-       button.setLayoutParams(params);
-       button.setScaleType(ImageView.ScaleType.FIT_XY);
+       SetButton(button1,content1);
+       SetButton(button2,content2);
 
-       button.setOnClickListener(new View.OnClickListener() {
-          public void onClick(View v) {
-              _currentContent = content;
-              ShowSlider(v);
-          }
-      });
+       return row;
+       //lay.addView(row);
+    }
 
-       /*TextView text = new TextView(this);
-       text.setText("Added tv");
-       _layout.addView(text);*/
+    void SetButton(ImageButton button,Content content){
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)button.getLayoutParams();
+        params.height = 900;
+        params.width = 726;
+
+        button.setBackgroundColor(517782);
+        button.setLayoutParams(params);
+        button.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        button.setPadding(5,5,5,5);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                _currentContent = content;
+                ShowSlider(v);
+            }
+        });
     }
 
     void ShowSlider(View v){

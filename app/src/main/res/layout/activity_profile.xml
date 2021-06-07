@@ -48,32 +48,9 @@
     </ScrollView>
 
     <ImageButton
-        android:id="@+id/btnProfile_profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.88"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageButton
-        android:id="@+id/btnHome_profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@mipmap/home"
-        android:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnProfile_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.881" />
-
-    <ImageButton
         android:id="@+id/btnSettings_ProfilePage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@mipmap/cog"
         android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -85,8 +62,8 @@
 
     <ImageButton
         android:id="@+id/btnCategorySearch_ProfilePage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@mipmap/search"
         android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -110,23 +87,11 @@
         app:layout_constraintTop_toBottomOf="@+id/txtHelloUser_ProfilePage"
         app:layout_constraintVertical_bias="0.411" />
 
-    <ImageButton
-        android:id="@+id/btnDiscover_profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@mipmap/search"
-        android:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnProfile_profile"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.881" />
-
     <TextView
         android:id="@+id/txtHelloUser_ProfilePage"
         android:layout_width="291dp"
         android:layout_height="87dp"
-        android:text="Hello                       Erlich Bachman"
+        android:text="Hello\nErlich Bachman"
         android:textColor="@color/white"
         android:textSize="36sp"
         android:textStyle="bold"
@@ -136,5 +101,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.024" />
+
+    <LinearLayout
+        android:layout_width="233dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="600dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/main_buttons_background"
+        android:elevation="10dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="7dp"
+        android:paddingRight="25dp"
+        android:paddingBottom="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnHome_profile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@mipmap/home"
+            android:backgroundTint="@color/white" />/>
+
+        <ImageButton
+            android:id="@+id/btnProfile_profile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/btnDiscover_profile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:background="@mipmap/search"
+            android:backgroundTint="@color/white" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
