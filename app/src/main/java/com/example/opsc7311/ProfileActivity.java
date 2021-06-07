@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class ProfileActivity extends MainLayout {
 
     LinearLayout _layout;
     Dialog _dialog;
+    StackView _stackView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,17 @@ public class ProfileActivity extends MainLayout {
 
         _layout = findViewById(R.id.llScroll_profile);
         _dialog = new Dialog(this);
+        _stackView = findViewById(R.id.stkView_profile);
 
+
+        LoadGoalStack();
         LoadCategories();
+    }
+    void LoadGoalStack(){
+        GoalStackAdapter adapter = new GoalStackAdapter(Profile.getInstance().goals,
+        R.layout.goal_stack,ProfileActivity.this);
+        _stackView.setAdapter(adapter);
+
     }
     void LoadCategories(){
 

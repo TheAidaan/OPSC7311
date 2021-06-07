@@ -7,6 +7,24 @@
     android:background="#517782"
     tools:context=".ProfileActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.227">
+
+        <StackView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/stkView_profile"/>
+
+
+    </RelativeLayout>
+
     <ScrollView
         android:id="@+id/scroll_profile"
         android:layout_width="404dp"
