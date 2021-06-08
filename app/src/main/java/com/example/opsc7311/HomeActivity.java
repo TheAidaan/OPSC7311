@@ -1,6 +1,7 @@
 package com.example.opsc7311;
 
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
@@ -39,53 +40,52 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         setContentView(R.layout.activity_home);
 
         SetUpConstants(findViewById((R.id.btnProfile_home)),findViewById((R.id.btnHome_home)),findViewById((R.id.btnDiscover_home)));
-        _dialog = new Dialog(this);
 
+        _dialog = new Dialog(this);
+        lay = findViewById(R.id.tblScroll_home);
+
+        DisplayContent();
+
+    }
+    void DisplayContent(){
         Content Testcontent1 = new Content("Arobranch","A place in stellenbosch to climb a tree",R.mipmap.test5);
         Content Testcontent2 = new Content("CampsBay","A place in africa to commit tax fraud", R.mipmap.test2);
         Content Testcontent3 = new Content("KoelBay","A place on earth to get eaten by a shark", R.mipmap.test3);
-        //_layout = findViewById(R.id.llScroll_home);
-        lay = findViewById(R.id.tblScroll_home);
+        TableRow row = SetRow(Testcontent1,Testcontent2);
 
-        //TableRow row = new TableRow(this);
+        lay.addView(row);
 
-        lay.addView(GetContent(Testcontent1,Testcontent2));
-        //LoadContent(Testcontent1);
-        //LoadContent(Testcontent2);
-        //LoadContent(Testcontent3);
 
     }
-
-   View GetContent(Content content1, Content content2){
+    TableRow SetRow(Content content1, Content content2){
        TableRow row = new TableRow(this);
 
-       ImageButton button1 = new ImageButton(this);
-       ImageButton button2 = new ImageButton(this);
-
-       button1.setImageResource(content1.imageID);
-       button2.setImageResource(content2.imageID);
-
-
-       row.addView(button1);
-       row.addView(button2);
-
-       SetButton(button1,content1);
-       SetButton(button2,content2);
+       SetContent(row,content1);
+       SetContent(row,content2);
 
        return row;
-       //lay.addView(row);
     }
 
-    void SetButton(ImageButton button,Content content){
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)button.getLayoutParams();
+    CardView SetContent(TableRow row, Content content){
+        CardView card = new CardView(this);
+        row.addView(card);
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)card.getLayoutParams();
         params.height = 900;
         params.width = 726;
 
-        button.setBackgroundColor(517782);
-        button.setLayoutParams(params);
-        button.setScaleType(ImageView.ScaleType.FIT_XY);
+        card.setRadius(30);
+        params.setMargins(15,15,15,15);
 
-        button.setPadding(5,5,5,5);
+        card.setLayoutParams(params);
+
+        ImageView button = new ImageView(this);
+        card.addView(button);
+        button.setImageResource(content.imageID);
+
+        button.setBackgroundColor(517782);
+
+        button.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -93,6 +93,17 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 ShowSlider(v);
             }
         });
+
+        return card;
+    }
+
+    void SetButton(ImageButton button,Content content){
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)button.getLayoutParams();
+        params.height = 900;
+        params.width = 726;
+        params.setMargins(15,15,15,15);
+
+
     }
 
     void ShowSlider(View v){

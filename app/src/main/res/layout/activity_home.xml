@@ -26,39 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="160dp"
-                    android:layout_height="250dp"
-                    app:srcCompat="@mipmap/test3"
-                    android:scaleType="fitXY"
-                    android:background="@drawable/main_buttons_background"/>
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/imageView1"-->
-<!--                    android:layout_width="160dp"-->
-<!--                    android:layout_height="250dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    app:srcCompat="@mipmap/test1"-->
-<!--                    android:scaleType="fitXY"-->
-<!--/>-->
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="160dp"
-                    android:layout_height="250dp"
-                    android:layout_weight="1"
-                    android:scaleType="fitXY"
-                    android:background="@drawable/main_buttons_background"
-                    app:srcCompat="@mipmap/test1"
-                    android:padding="5dp"/>
-            </TableRow>
-
-
         </TableLayout>
     </ScrollView>
 
@@ -71,7 +38,7 @@
         android:text="For You"
         android:textAlignment="viewStart"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +55,7 @@
         android:text="Following"
         android:textAlignment="textEnd"
         android:textColor="#C1C1C1"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
