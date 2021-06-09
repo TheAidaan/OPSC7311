@@ -34,8 +34,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtCategories_ProfilePage">
 
-        <LinearLayout
-            android:id="@+id/llScroll_profile"
+        <TableLayout
+            android:id="@+id/tblScroll_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -43,7 +43,7 @@
 
 
 
-        </LinearLayout>
+        </TableLayout>
 
     </ScrollView>
 

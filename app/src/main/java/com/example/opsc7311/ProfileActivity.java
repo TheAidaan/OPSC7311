@@ -1,29 +1,28 @@
 package com.example.opsc7311;
 
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
+
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+
 import android.widget.StackView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 public class ProfileActivity extends MainLayout {
 
-    LinearLayout _layout;
+    TableLayout _layout;
     Dialog _dialog;
     StackView _stackView;
 
@@ -34,7 +33,7 @@ public class ProfileActivity extends MainLayout {
 
         SetUpConstants(findViewById((R.id.btnProfile_profile)),findViewById((R.id.btnHome_profile)),findViewById((R.id.btnDiscover_profile)));
 
-        _layout = findViewById(R.id.llScroll_profile);
+        _layout = findViewById(R.id.tblScroll_profile);
         _dialog = new Dialog(this);
         _stackView = findViewById(R.id.stkView_profile);
 
@@ -50,13 +49,20 @@ public class ProfileActivity extends MainLayout {
     }
     void LoadCategories(){
 
+        TableRow row = new TableRow(this);
+        int i=0;
         for (Category category: Profile.getInstance().categories
-             ) {
-            View view = CreateCategoryFolder();
+             )
+        {
+            i++;
+
+            View view = CreateCategoryFolder(row);
 
             TextView txtTitle = view.findViewById(R.id.txtLabel_category_folder);
             TextView txtProgress = view.findViewById(R.id.txtProgress_category_folder);
             ImageView imgIcon = view.findViewById(R.id.imgIcon_category_folder);
+
+            //imgIcon.setBackgroundColor();
 
             ConstraintLayout folder = view.findViewById(R.id.category_folder);
 
@@ -71,7 +77,38 @@ public class ProfileActivity extends MainLayout {
                     OpenCategoryFolder(category);
                 }
             });
+            if (i%2==0)
+            {
+                _layout.addView(row);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)view.getLayoutParams();
+                params.setMargins(60,0,30,5);
+                row  = new TableRow(this);
+            }else{
+                if (Profile.getInstance().categories.size() == i){
+                    _layout.addView(row);
+                }else{
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)view.getLayoutParams();
+                    params.setMargins(30,0,60,5);
+                }
+            }
+
         }
+    }
+    View CreateCategoryFolder(TableRow row){
+        ViewStub stub = new ViewStub(this);
+
+        row.addView(stub);
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)stub.getLayoutParams();
+        params.height = 485;
+        params.width = 535;
+
+        stub.setLayoutResource(R.layout.category_folder);
+        View inflated = stub.inflate();
+
+        inflated.setElevation(10);
+
+        return inflated;
     }
 
     void OpenCategoryFolder(Category category){
@@ -102,21 +139,6 @@ public class ProfileActivity extends MainLayout {
         _dialog.show();
     }
 
-    View CreateCategoryFolder(){
-        ViewStub stub = new ViewStub(this);
-        _layout.addView(stub);
 
-        ViewGroup.LayoutParams params = stub.getLayoutParams();
-        params.height = 485;
-        params.width = 535;
-
-        stub.setPadding(100,100,100,100);
-
-
-        stub.setLayoutResource(R.layout.category_folder);
-        View inflated = stub.inflate();
-
-        return inflated;
-    }
 
  }
