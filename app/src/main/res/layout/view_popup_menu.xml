@@ -3,7 +3,7 @@
     android:layout_width="350dp"
     android:layout_height="520dp"
     android:layout_gravity="center"
-    android:background="#00FFFFFF"
+    android:background="@color/material_on_background_disabled"
     android:orientation="vertical"
     android:padding="15dp">
 
@@ -94,7 +94,7 @@
             app:cardElevation="10dp">
 
             <ImageView
-                android:id="@+id/btnClose_view_popup_menu"
+                android:id="@+id/btn_close_view_popup_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"

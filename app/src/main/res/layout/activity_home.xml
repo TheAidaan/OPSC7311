@@ -10,12 +10,15 @@
     android:id="@+id/mylayout">
 
 
+
+
     <ScrollView
         android:id="@+id/scv_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="-29dp">
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="174dp">
+
 
 
         <TableLayout
@@ -62,20 +65,21 @@
         app:layout_constraintVertical_bias="0.023" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="450dp"
         android:layout_marginEnd="300dp"
-        android:backgroundTint="#D4824C"
-        app:cardElevation="10dp"
+        android:backgroundTint="#1E90FF"
         app:cardCornerRadius="75dp"
+
+        app:cardElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/btnClose_view_popup_menu"
+            android:id="@+id/btn_close_view_popup_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

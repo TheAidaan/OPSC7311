@@ -5,6 +5,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -29,7 +31,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
     String Test[] = {"one,two,three,four"};
 
     Content _currentContent;
-    //LinearLayout _layout;
+    ImageView _btnCamera;
     TableLayout lay;
     Dialog _dialog;
 
@@ -44,10 +46,17 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         _dialog = new Dialog(this);
         lay = findViewById(R.id.tblScroll_home);
+        _btnCamera = findViewById(R.id.btn_close_view_popup_menu);
+
+
+
+
 
         DisplayContent();
 
     }
+
+
 
     void DisplayContent() {
         Content Testcontent1 = new Content("Arobranch", "A place in stellenbosch to climb a tree", R.mipmap.test5);
@@ -114,7 +123,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         _dialog.setContentView(R.layout.view_popup_menu);
 
-        ImageView btnClose = _dialog.findViewById(R.id.btnClose_view_popup_menu);
+        ImageView btnClose = _dialog.findViewById(R.id.btn_close_view_popup_menu);
         ImageView image = _dialog.findViewById(R.id.imgView_view_popup_menu);
         ImageView btnAddToCat = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
         ImageView btnAddToGoal = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
@@ -173,7 +182,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 button.setText(goal.name);
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Toast.makeText(HomeActivity.this, "added to " + txtTodo, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Added to " + action, Toast.LENGTH_SHORT).show();
                         goal.contents.add(_currentContent);
                     }
                 });
@@ -212,7 +221,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 button.setText(category.name);
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Toast.makeText(HomeActivity.this, "added to " + txtTodo, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Added to " + action, Toast.LENGTH_SHORT).show();
                         category.contents.add(_currentContent);
                     }
                 });
@@ -356,4 +365,13 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100){
+            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        }
+
+        //bitmap is the picture
+    }
 }
