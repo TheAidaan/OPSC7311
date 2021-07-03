@@ -24,7 +24,8 @@
         android:background="@drawable/view_popup_menu"
         android:backgroundTint="#333333"
         android:orientation="vertical"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">>
 
         <HorizontalScrollView
             android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.example.opsc7311;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 public class Content {
@@ -8,12 +9,12 @@ public class Content {
     public String description;
     public boolean checekedIn;
 
-    int imageID;
+    Bitmap image;
 
     Category _category;
     Goal _goal;
 
-    Content(String Name, String Description, int ImageID){
+    Content(String Name, String Description, Bitmap Image){
         //image = Image;
         name= Name;
         description = Description;
@@ -22,7 +23,7 @@ public class Content {
         _category = null;
         _goal = null;
 
-        imageID = ImageID;
+        image = Image;
     }
 
     public void CheckIn(){

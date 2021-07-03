@@ -1,14 +1,25 @@
 package com.example.opsc7311;
 
 
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +33,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClickListener {
@@ -35,7 +47,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
     TableLayout lay;
     Dialog _dialog;
 
-    List<Content> testContents;
+    List<Content> testContents = new ArrayList<Content>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,37 +60,123 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         lay = findViewById(R.id.tblScroll_home);
         _btnCamera = findViewById(R.id.btn_close_view_popup_menu);
 
+        if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.CAMERA)!=
+                PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+        }
 
+        _btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent,100);
+            }
+        });
 
+        TestContent();
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        DisplayContent();
+        super.onActivityResult(requestCode, resultCode, data);
+    if(requestCode==100){
+        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+
+        CapturePicture(bitmap);
+
+        }
+    }
+
+    void CapturePicture(Bitmap bitmap){
+        _dialog.dismiss();
+        _dialog.setContentView(R.layout.capture_image);
+
+        ImageView image = _dialog.findViewById(R.id.imgView_capture_image);
+        EditText edtTitle = _dialog.findViewById(R.id.edtImageTitle_capture_image);
+        EditText edtDescription = _dialog.findViewById(R.id.edtDescription_capture_image);
+
+        image.setImageBitmap(bitmap);
+
+        ImageView btnClose = _dialog.findViewById(R.id.btnClose_capture_image);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _dialog.dismiss();
+            }
+        });
+
+        ImageView btnAdd =_dialog.findViewById(R.id.btnAdd_capture_image);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = edtTitle.getText().toString();
+                String description = edtDescription.getText().toString();
+
+                if (title.equals("") || description.equals("")){
+                    Toast.makeText(HomeActivity.this, "Please provide a title and a description", Toast.LENGTH_SHORT).show();
+                }else {
+                    Content newContent = new Content(title, "A place in stellenbosch to climb a tree", bitmap);
+                    testContents.add(newContent);
+                    _dialog.dismiss();
+                    LoadContent();
+                }
+            }
+        });
+
+        _dialog.show();
 
     }
 
+    void TestContent() {
+        Drawable drawable = getResources().getDrawable(R.drawable.test5);
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Content Testcontent1 = new Content("Arobranch", "A place in stellenbosch to climb a tree", bitmap);
 
+        testContents.add(Testcontent1);
 
-    void DisplayContent() {
-        Content Testcontent1 = new Content("Arobranch", "A place in stellenbosch to climb a tree", R.mipmap.test5);
-        Content Testcontent2 = new Content("CampsBay", "A place in africa to commit tax fraud", R.mipmap.test2);
-        Content Testcontent3 = new Content("KoelBay", "A place on earth to get eaten by a shark", R.mipmap.test3);
-        TableRow row = SetRow(Testcontent1, Testcontent2);
+        drawable = getResources().getDrawable(R.drawable.test2);
+         bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Content Testcontent2 = new Content("CampsBay", "A place in africa to commit tax fraud", bitmap);
 
-        lay.addView(row);
+        testContents.add(Testcontent2);
+
+        drawable = getResources().getDrawable(R.drawable.test3);
+        bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Content Testcontent3 = new Content("KoelBay", "A place on earth to get eaten by a shark", bitmap);
+
+        testContents.add(Testcontent3);
+        //TableRow row = SetRow(Testcontent1, Testcontent2);
+        LoadContent();
+        //lay.addView(row);
 
 
     }
 
-    TableRow SetRow(Content content1, Content content2) {
+    void LoadContent() {
+        lay.removeAllViews();
         TableRow row = new TableRow(this);
+        int i=0;
+        for (Content content: testContents
+             ) {
+            i++;
+            SetContent(row, content);
 
-        SetContent(row, content1);
-        SetContent(row, content2);
+            if (i%2==0){
+                lay.addView(row);
+                row = new TableRow(this);
+            }else {
+                if (i==testContents.size()){
+                    lay.addView(row);
+                }
+            }
+        }
+        //SetContent(row, content1);
+        //SetContent(row, content2);
 
-        return row;
     }
 
-    CardView SetContent(TableRow row, Content content) {
+    TableRow SetContent(TableRow row, Content content) {
         CardView card = new CardView(this);
         row.addView(card);
 
@@ -93,7 +191,8 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         ImageView button = new ImageView(this);
         card.addView(button);
-        button.setImageResource(content.imageID);
+        button.setImageBitmap(content.image);
+        //button.setImageResource(content.imageID);
 
         button.setBackgroundColor(517782);
 
@@ -106,7 +205,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
             }
         });
 
-        return card;
+        return row;
     }
 
 
@@ -130,7 +229,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         TextView title = _dialog.findViewById(R.id.txtTitle_view_popup_menu);
         TextView description = _dialog.findViewById(R.id.txtDescription_view_popup_menu);
 
-        image.setImageResource(_currentContent.imageID);
+        image.setImageBitmap(_currentContent.image);
         title.setText(_currentContent.name);
         description.setText(_currentContent.description);
 
@@ -163,7 +262,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         _dialog.setContentView(R.layout.save_popup_menu);
 
         ImageView btnView;
-        ImageView btnClose = _dialog.findViewById(R.id.btnClose_save_popup_menu);
+        ImageView btnClose =  _dialog.findViewById(R.id.btnClose_save_popup_menu);
 
         ImageView imgImage = _dialog.findViewById(R.id.imgView_save_popup_menu);
         TextView txtContentName = _dialog.findViewById(R.id.txtContentName_save_popup_menu);
@@ -188,6 +287,8 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 });
                 btnView = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
                 btnView.setImageResource(R.mipmap.eye);
+
+
                 btnView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -196,7 +297,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 });
 
                 ImageView btnCategory = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
-
+                btnCategory.setImageResource(R.mipmap.pushpin);
                 btnCategory.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         ShowSavePopUp("Category");
@@ -226,6 +327,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                     }
                 });
                 btnView = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
+                btnView.setImageResource(R.mipmap.eye);
                 btnView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -235,7 +337,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
                 btnAdd.setImageResource(R.mipmap.pushpin);
                 ImageView btnGoal = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
-                btnView.setImageResource(R.mipmap.eye);
+                btnGoal.setImageResource(R.mipmap.target);
                 btnGoal.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         ShowSavePopUp("Goal");
@@ -255,7 +357,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         }
 
 
-        imgImage.setImageResource(_currentContent.imageID);
+        imgImage.setImageBitmap(_currentContent.image);
 
         txtDescription.setText(_currentContent.description);
         txtContentName.setText(_currentContent.name);
@@ -365,13 +467,4 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==100){
-            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-        }
-
-        //bitmap is the picture
-    }
 }

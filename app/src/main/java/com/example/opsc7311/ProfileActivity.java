@@ -115,16 +115,15 @@ public class ProfileActivity extends MainLayout {
     void OpenCategoryFolder(Category category){
         _dialog.setContentView(R.layout.open_category_folder);
         LinearLayout layout =_dialog.findViewById(R.id.llContents_open_category_popup_menu);
-int i=0;
+
         for (Content content:
                 category.contents
              ) {
-            i++;
             ImageView image = new ImageView(this);
-            image.setImageResource(content.imageID);
+            image.setImageBitmap(content.image);
             layout.addView(image);
             image.setLayoutParams(new LinearLayout.LayoutParams(1120, 850));
-            Toast.makeText(this, "done" +i, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "done" , Toast.LENGTH_SHORT).show();
         }
         TextView txtTitle = _dialog.findViewById(R.id.txtTitle_open_category_popup_menu);
         TextView txtDescription = _dialog.findViewById(R.id.txtDescription_open_category_popup_menu);

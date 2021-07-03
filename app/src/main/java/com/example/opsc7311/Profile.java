@@ -29,4 +29,20 @@ public class Profile {
     public List<Category> categories = new ArrayList<Category>();
     public List<Goal> goals = new ArrayList<Goal>();
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
