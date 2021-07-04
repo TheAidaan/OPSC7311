@@ -27,7 +27,7 @@
         android:id="@+id/txtTitle_add_category_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add to new Catgory"
+        android:text="Add to new Category"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="22sp"
