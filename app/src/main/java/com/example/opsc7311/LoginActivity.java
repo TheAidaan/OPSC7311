@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class SignInActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     EditText _edtUsername,_edtPassword;
     Button _btnLogin;
     TextView _txtIncorrectInput;
@@ -32,7 +33,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
 
-        _edtUsername = findViewById((R.id.edtEmailAdress_SignIn));
+        _edtUsername = findViewById((R.id.edtEmailAddress_SignIn));
         _edtPassword = findViewById((R.id.edtPassword_SignIn));
         _btnLogin = findViewById((R.id.btnLogin_SignIn));
         _txtIncorrectInput = findViewById(R.id.txtIncorrectInput_SignIn);
@@ -49,7 +50,7 @@ public class SignInActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(SignInActivity.this,IntroductionActivity.class);
+                Intent intent= new Intent(LoginActivity.this,IntroductionActivity.class);
                 startActivity(intent);
             }
         });
@@ -67,23 +68,28 @@ public class SignInActivity extends AppCompatActivity {
                 if(snapshot.exists()){
                     String databasePassword = snapshot.child(enteredUsername).child("password").getValue(String.class);
 
-                    if (databasePassword.equals(enteredPassword)){
-                        String databaseName = snapshot.child("username").child("name").getValue(String.class);
-                        String databaseUsername = snapshot.child("username").child("username").getValue(String.class);
-                        String databaseEmail = snapshot.child("username").child("email").getValue(String.class);
+                    Toast myToast = Toast.makeText(LoginActivity.this, databasePassword, Toast.LENGTH_LONG);
+                    myToast.show();
+
+                    /*if (databasePassword.equals(enteredPassword)){
+                        String databaseName = snapshot.child(enteredUsername).child("name").getValue(String.class);
+                        String databaseUsername = snapshot.child(enteredUsername).child("username").getValue(String.class);
+                        String databaseEmail = snapshot.child(enteredUsername).child("email").getValue(String.class);
 
                         Profile.getInstance().setName(databaseName);
-                        Profile.getInstance().setName(databaseUsername);
-                        Profile.getInstance().setName(databaseEmail);
-                        Profile.getInstance().setName(enteredPassword);
+                        Profile.getInstance().setUsername(databaseUsername);
+                        Profile.getInstance().setEmail(databaseEmail);
+                        Profile.getInstance().setPassword(enteredPassword);
 
                         CreateTestValues();
 
-                        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intent);
 
+
+
                     }else
-                    {
+                    {*/
                         _edtPassword.setFocusable(true);
                         _edtPassword.setFocusableInTouchMode(true);///add this line
                         _edtPassword.requestFocus();
@@ -92,7 +98,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         _txtIncorrectInput.setText("Incorrect Password");
 
-                    }
+                   // }
                 }else{
 
                     _edtUsername.setFocusable(true);
@@ -115,8 +121,7 @@ public class SignInActivity extends AppCompatActivity {
     void CreateTestValues(){
 
             // test values
-            Profile.getInstance().name = "Triangle";
-            Profile.getInstance().username = "theShape";
+
             Drawable drawable = getResources().getDrawable(R.drawable.test1);
             Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
             Content Testcontent4 = new Content("Injury", "I got hurt here", bitmap);

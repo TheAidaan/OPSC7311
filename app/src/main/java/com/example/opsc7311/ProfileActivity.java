@@ -5,11 +5,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 
 import android.app.Dialog;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +37,21 @@ public class ProfileActivity extends MainLayout {
         _layout = findViewById(R.id.tblScroll_profile);
         _dialog = new Dialog(this);
         _stackView = findViewById(R.id.stkView_profile);
+
+
+
+        TextView helloUser = findViewById(R.id.txtHelloUser_Profile);
+        helloUser.setText("Hello \n" + Profile.getInstance().name);
+
+        ImageButton btnSettings = findViewById(R.id.btnSettings_ProfilePage);
+        btnSettings.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(ProfileActivity.this,SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         LoadGoalStack();

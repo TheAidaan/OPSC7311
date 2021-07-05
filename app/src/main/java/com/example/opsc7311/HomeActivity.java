@@ -57,11 +57,9 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         SetUpConstants(findViewById((R.id.btnProfile_home)), findViewById((R.id.btnHome_home)), findViewById((R.id.btnDiscover_home)));
 
         _dialog = new Dialog(this);
+
         lay = findViewById(R.id.tblScroll_home);
         _btnCamera = findViewById(R.id.btn_close_view_popup_menu);
-
-        TextView helloUser = findViewById(R.id.txtHelloUser_ProfilePage);
-        helloUser.setText("Hello \n" + Profile.getInstance().name);
 
         if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.CAMERA)!=
                 PackageManager.PERMISSION_GRANTED){

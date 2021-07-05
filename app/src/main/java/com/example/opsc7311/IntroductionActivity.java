@@ -33,7 +33,7 @@ public class IntroductionActivity extends AppCompatActivity {
 
     }
     void SignInWithEmail() {
-        Intent intent = new Intent(IntroductionActivity.this, SignInActivity.class);
+        Intent intent = new Intent(IntroductionActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 

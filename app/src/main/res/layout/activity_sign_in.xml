@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#517782"
-    tools:context=".SignInActivity"
+    tools:context=".LoginActivity"
     android:padding="15dp">
 
     <Button
@@ -103,7 +103,7 @@
         android:text="Email"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/edtEmailAdress_SignIn"
+        app:layout_constraintBottom_toTopOf="@+id/edtEmailAddress_SignIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtWelcome_SignIn"
@@ -124,7 +124,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtWelcome_SignIn" />
 
     <EditText
-        android:id="@+id/edtEmailAdress_SignIn"
+        android:id="@+id/edtEmailAddress_SignIn"
         style="@style/TextAppearance.Compat.Notification.Info"
         android:layout_width="240dp"
         android:layout_height="39dp"

@@ -87,11 +87,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.268"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHelloUser_ProfilePage"
+        app:layout_constraintTop_toBottomOf="@+id/txtHelloUser_Profile"
         app:layout_constraintVertical_bias="0.411" />
 
     <TextView
-        android:id="@+id/txtHelloUser_ProfilePage"
+        android:id="@+id/txtHelloUser_Profile"
         android:layout_width="291dp"
         android:layout_height="87dp"
         android:text="Hello\nErlich Bachman"

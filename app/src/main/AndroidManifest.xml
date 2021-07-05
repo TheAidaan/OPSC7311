@@ -17,7 +17,7 @@
         <activity android:name=".DiscoverActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".SignInActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".IntroductionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

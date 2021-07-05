@@ -8,26 +8,11 @@
     android:background="#517782">
 
 
-    <TextView
-        android:id="@+id/txtBack_Settings"
-        android:layout_width="120dp"
-        android:layout_height="42dp"
-        android:text="Back"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01999998" />
-
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -234,7 +219,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cdvChangeEmail_Settings"
+                android:id="@+id/cdvEmailAddress_UpdateAccount"
                 android:layout_width="320dp"
                 android:layout_height="58dp"
                 android:layout_gravity="center"
@@ -277,6 +262,7 @@
                 android:layout_height="42dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="45dp"
                 android:background="@drawable/round_buttons"
                 android:backgroundTint="#1A1A1A"
                 android:text="Log Out"
@@ -287,4 +273,20 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/txtBack_Settings"
+        android:layout_width="120dp"
+        android:layout_height="42dp"
+        android:text="Back"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01999998" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     Boolean _validDetails = false;
 
-    Boolean _validUsername;
+    Boolean _validUsername= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +62,22 @@ public class SignUpActivity extends AppCompatActivity {
                 _password = _txtPassword.getText().toString();
 
                 if (ValidInputs()) {
-                    {
-                        rootNode = FirebaseDatabase.getInstance();
-                        reference = rootNode.getReference("users");
-                        reference.child(_username).setValue(CreateHelperClass());
-                    }
+
+                    FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+                    DatabaseReference reference = rootNode.getReference("users");
+                    reference.child(_username).setValue(CreateHelperClass());
+
+                    Profile.getInstance().setName(_name);
+                    Profile.getInstance().setUsername(_name);
+                    Profile.getInstance().setEmail(_email);
+                    Profile.getInstance().setPassword(_password);
+
+                    Toast myToast = Toast.makeText(SignUpActivity.this, "I'm a toast!", Toast.LENGTH_LONG);
+                    myToast.show();
+
+                    Intent intent= new Intent(SignUpActivity.this,HomeActivity.class);
+                    startActivity(intent);
+
                 }
             }
         });
