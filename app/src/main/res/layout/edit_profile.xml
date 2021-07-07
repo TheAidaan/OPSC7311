@@ -56,49 +56,38 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         />
-    <EditText
-        android:id="@+id/edtName_ProfileSettings"
-        android:layout_width="240dp"
-        android:layout_height="39dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/edit_box"
-        android:ems="10"
-        android:hint="Enter your password"
-        android:inputType="textPassword"
-        android:paddingLeft="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#C1C1C1"
-        android:layout_gravity="center"
-        android:textSize="14sp"
-        />
 
-    <TextView
-        android:layout_width="240dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtIName_EditProfile"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Username"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-      />
-
-    <EditText
-        android:id="@+id/edtUsername_ProfileSettings"
-        android:layout_width="240dp"
-        android:layout_height="39dp"
-        android:layout_marginBottom="36dp"
-        android:background="@drawable/edit_box"
-        android:ems="10"
-        android:hint="Enter your password"
-        android:inputType="textPassword"
-        android:paddingLeft="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#C1C1C1"
-        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:textColorHint="@color/white"
         android:textSize="14sp"
-        />
+        android:layout_gravity="center"
+
+        app:errorEnabled="true"
+        app:errorTextColor="#D44C4C"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="240dp"
+            android:layout_height="39dp"
+            android:background="@drawable/edit_box"
+            android:hint="Full Name"
+            android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C1C1C1"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
     <Button
-        android:id="@+id/btnSave_UpdateAccount"
+        android:id="@+id/btnSave_UpdateEmail"
         android:layout_width="320dp"
         android:layout_height="42dp"
         android:layout_gravity="center"

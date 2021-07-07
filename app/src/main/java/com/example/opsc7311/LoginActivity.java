@@ -11,10 +11,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +22,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText _edtUsername,_edtPassword;
+    TextInputLayout _txtLUsername,_txtLPassword;
     Button _btnLogin;
     TextView _txtIncorrectInput;
 
@@ -33,16 +32,24 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
 
-        _edtUsername = findViewById((R.id.edtEmailAddress_SignIn));
-        _edtPassword = findViewById((R.id.edtPassword_SignIn));
+        _txtLUsername = findViewById((R.id.txtLUsername_SignIn));
+        _txtLPassword = findViewById((R.id.txtLPassword_SignIn));
         _btnLogin = findViewById((R.id.btnLogin_SignIn));
-        _txtIncorrectInput = findViewById(R.id.txtIncorrectInput_SignIn);
 
         _btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                ValidateInput(_edtUsername.getText().toString(), _edtPassword.getText().toString());
+                String enteredUsername = _txtLUsername.getEditText().getText().toString().trim();
+                String enteredPassword = _txtLPassword.getEditText().getText().toString().trim();
+
+                if(!enteredUsername.isEmpty())
+                    ValidateInput(enteredUsername, enteredPassword);
+                else
+                    _txtLUsername.setError("Field can not be empty");
+
+
+
             }
         });
 
@@ -66,12 +73,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    _txtLUsername.setError(null);
                     String databasePassword = snapshot.child(enteredUsername).child("password").getValue(String.class);
 
-                    Toast myToast = Toast.makeText(LoginActivity.this, databasePassword, Toast.LENGTH_LONG);
-                    myToast.show();
-
-                    /*if (databasePassword.equals(enteredPassword)){
+                    if (databasePassword.equals(enteredPassword)){
                         String databaseName = snapshot.child(enteredUsername).child("name").getValue(String.class);
                         String databaseUsername = snapshot.child(enteredUsername).child("username").getValue(String.class);
                         String databaseEmail = snapshot.child(enteredUsername).child("email").getValue(String.class);
@@ -86,28 +91,16 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intent);
 
-
+                        _txtLUsername.setError(null);
 
                     }else
-                    {*/
-                        _edtPassword.setFocusable(true);
-                        _edtPassword.setFocusableInTouchMode(true);///add this line
-                        _edtPassword.requestFocus();
+                    {
+                        _txtLPassword.setError("Incorrect Password");
 
-                        _edtPassword.setBackgroundResource(R.drawable.incorrect_input);
-
-                        _txtIncorrectInput.setText("Incorrect Password");
-
-                   // }
+                    }
                 }else{
 
-                    _edtUsername.setFocusable(true);
-                    _edtUsername.setFocusableInTouchMode(true);
-                    _edtUsername.requestFocus();
-
-                    _edtUsername.setBackgroundResource(R.drawable.incorrect_input);
-
-                    _txtIncorrectInput.setText("Invalid Username");
+                    _txtLUsername.setError("Invalid Username");
                 }
             }
 

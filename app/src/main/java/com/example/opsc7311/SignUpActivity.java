@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,9 +23,8 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference reference;
 
-    TextView _txtName, _txtUsername, _txtEmail, _txtPassword, _txtPasswordConfirmation;
     String _name, _username, _email, _password;
-
+    TextInputLayout _txtLEmail,_txtLName, _txtLUsername, _txtLPassword, _txtLPasswordConfirmation;
     Boolean _validDetails = false;
 
     Boolean _validUsername= false;
@@ -34,7 +34,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        TextView btnBack = findViewById((R.id.btnBack_signUp));
+        TextView btnBack = findViewById((R.id.btnBack_SignUp));
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,23 +43,24 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        _txtName = findViewById((R.id.edtName_signup));
-        _txtUsername = findViewById((R.id.edtUsername_signup));
-        _txtEmail = findViewById((R.id.edtEmailAdress_signup));
-        _txtPassword = findViewById((R.id.edtPassword_signup));
+        _txtLName = findViewById((R.id.txtIName_SignUp));
+        _txtLUsername = findViewById((R.id.txtIUsername_SignUp));
+        _txtLEmail = findViewById((R.id.txtIEmailAddress_SignUp));
+        _txtLPassword = findViewById((R.id.txtIPassword_SignUp));
 
-        _txtPasswordConfirmation = findViewById((R.id.edtPasswordConfirmation_signup));
+        _txtLPasswordConfirmation = findViewById((R.id.txtIPasswordConfirmation_SignUp));
 
-        Button btnSignUp = findViewById((R.id.btnSignUp_signup));
+        Button btnSignUp = findViewById((R.id.btnSignUp_SignUp));
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                _name = _txtName.getText().toString();
-                _username = _txtUsername.getText().toString();
-                _email = _txtEmail.getText().toString();
-                _password = _txtPassword.getText().toString();
+                _email="k";
+                _name = _txtLName.getEditText().getText().toString().trim();
+                _username = _txtLUsername.getEditText().getText().toString().trim();
+                _email = _txtLEmail.getEditText().getText().toString().trim();
+                _password = _txtLPassword.getEditText().getText().toString().trim();
 
                 if (ValidInputs()) {
 
@@ -87,54 +88,44 @@ public class SignUpActivity extends AppCompatActivity {
 
         Boolean validName, validEmail, validPassword;
         if (_name.isEmpty()) {
-            _txtName.setBackgroundResource(R.drawable.incorrect_input);
-            _txtName.setError("Required field");
+            _txtLName.setError("Required field");
             validName = false;
         } else {
-            _txtName.setBackgroundResource(R.drawable.edit_box);
-            _txtPassword.setError(null);
+            _txtLPassword.setError(null);
             validName = true;
         }
 
         if (_username.isEmpty()) {
-            _txtUsername.setBackgroundResource(R.drawable.incorrect_input);
-            _txtUsername.setError("Required field");
+            _txtLUsername.setError("Required field");
             _validUsername = false;
         } else {
-            _txtUsername.setBackgroundResource(R.drawable.edit_box);
-            _txtPassword.setError(null);
+            _txtLPassword.setError(null);
             ValidateUsername();
         }
 
         if (_email.isEmpty()) {
-            _txtEmail.setBackgroundResource(R.drawable.incorrect_input);
-            _txtEmail.setError("Required field");
+            _txtLEmail.setError("Required field");
             validEmail = false;
         } else {
-            _txtEmail.setBackgroundResource(R.drawable.edit_box);
-            _txtPassword.setError(null);
+            _txtLPassword.setError(null);
             validEmail = ValidEmail();
         }
 
         if (_password.isEmpty()) {
-            _txtPassword.setBackgroundResource(R.drawable.incorrect_input);
-            _txtPassword.setError("Required field");
+            _txtLPassword.setError("Required field");
             validPassword = false;
         } else {
-            _txtPassword.setBackgroundResource(R.drawable.edit_box);
-            _txtPassword.setError(null);
+            _txtLPassword.setError(null);
 
             String passwordPattern = "^" + ".{6,}"+"$";
             if (_password.matches(passwordPattern))
                 validPassword = ValidPassword();
             else
             {
-                _txtPassword.setError("Password must be at least 6 characters long");
+                _txtLPassword.setError("Password must be at least 6 characters long");
                 validPassword = false;
 
             }
-
-
         }
 
         if (validEmail && validName && validPassword && _validUsername)
@@ -161,7 +152,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 _validUsername = true;
                 if(snapshot.exists()){
-                    _txtUsername.setError("Username is already taken");
+                    _txtLUsername.setError("Username is already taken");
                     _validUsername = false;
                 }
             }
@@ -176,11 +167,10 @@ public class SignUpActivity extends AppCompatActivity {
     Boolean ValidEmail() {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.[a-z]+";
         if (!_email.matches(emailPattern)) {
-            _txtPassword.setBackgroundResource(R.drawable.incorrect_input);
-            _txtEmail.setError("Invalid email address");
+            _txtLEmail.setError("Invalid email address");
             return false;
         } else {
-            _txtEmail.setError(null);
+            _txtLEmail.setError(null);
             _validDetails = true;
             return true;
         }
@@ -189,12 +179,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     Boolean ValidPassword() {
 
-        String passwordConfirmation = _txtPasswordConfirmation.getText().toString();
+        String passwordConfirmation = _txtLPassword.getEditText().getText().toString().trim();
         if (_password.equals(passwordConfirmation)) {
             return true;
         }
         else {
-            _txtPasswordConfirmation.setError("Passwords do not match");
+            _txtLPasswordConfirmation.setError("Passwords do not match");
             return false;
         }
 
