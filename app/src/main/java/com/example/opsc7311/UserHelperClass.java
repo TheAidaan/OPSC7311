@@ -1,5 +1,8 @@
 package com.example.opsc7311;
 
+
+import android.graphics.Bitmap;
+
 public class UserHelperClass {
 
     String name, username, email, password;
@@ -41,7 +44,5 @@ public class UserHelperClass {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) {this.password = password;}
 }

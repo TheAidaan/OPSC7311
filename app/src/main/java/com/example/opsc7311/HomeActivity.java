@@ -1,27 +1,30 @@
 package com.example.opsc7311;
 
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,6 +36,19 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,12 +58,16 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
     String Test[] = {"one,two,three,four"};
 
-    Content _currentContent;
+    ContentUploadHelperClass _currentContent;
     ImageView _btnCamera;
     TableLayout lay;
     Dialog _dialog;
 
     List<Content> testContents = new ArrayList<Content>();
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
+    StorageReference _storageReference;
+    DatabaseReference _databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +77,27 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         SetUpConstants(findViewById((R.id.btnProfile_home)), findViewById((R.id.btnHome_home)), findViewById((R.id.btnDiscover_home)));
 
         _dialog = new Dialog(this);
+        _storageReference = FirebaseStorage.getInstance().getReference("uploads");
+        _databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
+
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == RESULT_OK && result.getData() != null){
+                    Uri test = result.getData().getData();
+                    //UploadFile("test", "test te test test", test);
+                    //ImageView image = findViewById(R.id.imgTest);
+                    //image.setImageURI(test);
+                    //Toast.makeText(HomeActivity.this, "Done", Toast.LENGTH_SHORT).show();
+
+
+                    //Bundle bundle = result.getData().getExtras();
+                    //Bitmap bitmap  = (Bitmap) bundle.get("data");
+                   // CapturePicture(bitmap);
+                }
+            }
+        });
 
         lay = findViewById(R.id.tblScroll_home);
         _btnCamera = findViewById(R.id.btn_close_view_popup_menu);
@@ -70,24 +111,74 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,100);
+                activityResultLauncher.launch(intent);
             }
         });
 
-        TestContent();
+        //LoadContent();
 
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
-    if(requestCode==100){
-        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+    String getFileExtension(Uri uri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
 
-        CapturePicture(bitmap);
-
-        }
+        return mime.getExtensionFromMimeType(cr.getType(uri));
     }
+
+    void UploadFile(String name, String description, Uri UploadUri){
+
+        StorageReference fileReference = _storageReference.child(System.currentTimeMillis() + "."+ getFileExtension(UploadUri));
+        fileReference.putFile(UploadUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        ContentUploadHelperClass upload = new ContentUploadHelperClass(name, description,uri.toString(),false);
+                        String uploadID = _databaseReference.push().getKey();
+                        _databaseReference.child(uploadID).setValue(upload);
+
+                        Toast.makeText(HomeActivity.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(HomeActivity.this, "Upload was Unsuccessful", Toast.LENGTH_SHORT).show();
+
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                //la la la la
+            }
+        });
+
+    }
+
+    void LoadContent(){
+        List<ContentUploadHelperClass> uploads = new ArrayList<ContentUploadHelperClass>();
+        _databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for( DataSnapshot postSnapchat : snapshot.getChildren() ){
+                    ContentUploadHelperClass upload = postSnapchat.getValue(ContentUploadHelperClass.class);
+                    uploads.add(upload);
+                }
+                ArrangeContents(uploads);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
 
     void CapturePicture(Bitmap bitmap){
         _dialog.dismiss();
@@ -129,36 +220,14 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
     }
 
-    void TestContent() {
-        Drawable drawable = getResources().getDrawable(R.drawable.test5);
-        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-        Content Testcontent1 = new Content("Arobranch", "A place in stellenbosch to climb a tree", bitmap);
 
-        testContents.add(Testcontent1);
+    void ArrangeContents(List<ContentUploadHelperClass> contents) {
+        Toast.makeText(HomeActivity.this, "now its here", Toast.LENGTH_SHORT).show();
 
-        drawable = getResources().getDrawable(R.drawable.test2);
-         bitmap = ((BitmapDrawable)drawable).getBitmap();
-        Content Testcontent2 = new Content("CampsBay", "A place in africa to commit tax fraud", bitmap);
-
-        testContents.add(Testcontent2);
-
-        drawable = getResources().getDrawable(R.drawable.test3);
-        bitmap = ((BitmapDrawable)drawable).getBitmap();
-        Content Testcontent3 = new Content("KoelBay", "A place on earth to get eaten by a shark", bitmap);
-
-        testContents.add(Testcontent3);
-        //TableRow row = SetRow(Testcontent1, Testcontent2);
-        LoadContent();
-        //lay.addView(row);
-
-
-    }
-
-    void LoadContent() {
         lay.removeAllViews();
         TableRow row = new TableRow(this);
         int i=0;
-        for (Content content: testContents
+        for (ContentUploadHelperClass content: contents
              ) {
             i++;
             SetContent(row, content);
@@ -167,17 +236,15 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 lay.addView(row);
                 row = new TableRow(this);
             }else {
-                if (i==testContents.size()){
+                if (i==contents.size()){
                     lay.addView(row);
                 }
             }
         }
-        //SetContent(row, content1);
-        //SetContent(row, content2);
 
     }
 
-    TableRow SetContent(TableRow row, Content content) {
+    TableRow SetContent(TableRow row, ContentUploadHelperClass content) {
         CardView card = new CardView(this);
         row.addView(card);
 
@@ -192,7 +259,9 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         ImageView button = new ImageView(this);
         card.addView(button);
-        button.setImageBitmap(content.image);
+
+        Picasso.get().load(content.getImageUrl()).into(button);
+
         //button.setImageResource(content.imageID);
 
         button.setBackgroundColor(517782);
@@ -230,9 +299,9 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         TextView title = _dialog.findViewById(R.id.txtTitle_view_popup_menu);
         TextView description = _dialog.findViewById(R.id.txtDescription_view_popup_menu);
 
-        image.setImageBitmap(_currentContent.image);
-        title.setText(_currentContent.name);
-        description.setText(_currentContent.description);
+        Picasso.get().load(_currentContent.getImageUrl()).into(image);
+        title.setText(_currentContent.getName());
+        description.setText(_currentContent.getDescription());
 
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,7 +352,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Toast.makeText(HomeActivity.this, "Added to " + action, Toast.LENGTH_SHORT).show();
-                        goal.contents.add(_currentContent);
+                        //goal.contents.add(_currentContent);
                     }
                 });
                 btnView = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
@@ -324,7 +393,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Toast.makeText(HomeActivity.this, "Added to " + action, Toast.LENGTH_SHORT).show();
-                        category.contents.add(_currentContent);
+                        //category.contents.add(_currentContent);
                     }
                 });
                 btnView = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
@@ -358,7 +427,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         }
 
 
-        imgImage.setImageBitmap(_currentContent.image);
+        Picasso.get().load(_currentContent.imageUrl).into(imgImage);
 
         txtDescription.setText(_currentContent.description);
         txtContentName.setText(_currentContent.name);
@@ -404,7 +473,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                     Toast.makeText(HomeActivity.this, "enter a description ", Toast.LENGTH_SHORT).show();
                 } else {
                     Category category = new Category(name, description, Color.valueOf(0x7FFF62), R.mipmap.rocket);
-                    category.contents.add(_currentContent);
+                    //category.contents.add(_currentContent);
                     Profile.getInstance().categories.add(category);
                     _dialog.dismiss();
                 }
@@ -467,5 +536,6 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         }
     }
+
 
 }
