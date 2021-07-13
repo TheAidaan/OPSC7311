@@ -7,9 +7,18 @@ public class GoalHelperClass {
 
     public GoalHelperClass() { }
 
-    public GoalHelperClass(String goalID, String name, String description) {
+    public GoalHelperClass(String goalID, String name,float percentageCompleted) {
         this.goalID = goalID;
         this.name = name;
+        this.percentageCompleted = percentageCompleted;
+    }
+
+    public float getPercentageCompleted() {
+        return percentageCompleted;
+    }
+
+    public void setPercentageCompleted(float percentageCompleted) {
+        this.percentageCompleted = percentageCompleted;
     }
 
     public String getGoalID() {
@@ -18,14 +27,6 @@ public class GoalHelperClass {
 
     public void setGoalID(String goalID) {
         this.goalID = goalID;
-    }
-
-    public String getCategoryID() {
-        return goalID;
-    }
-
-    public void setCategoryID(String categoryID) {
-        this.goalID = categoryID;
     }
 
     public String getName() {

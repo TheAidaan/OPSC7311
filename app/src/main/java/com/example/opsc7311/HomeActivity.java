@@ -215,8 +215,8 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         _databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for( DataSnapshot postSnapchat : snapshot.getChildren() ){
-                    ContentUploadHelperClass upload = postSnapchat.getValue(ContentUploadHelperClass.class);
+                for( DataSnapshot postSnapshot : snapshot.getChildren() ){
+                    ContentUploadHelperClass upload = postSnapshot.getValue(ContentUploadHelperClass.class);
                     uploads.add(upload);
                 }
                 ArrangeContents(uploads);
@@ -408,14 +408,15 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 }
             });
 
-            for (Goal goal : Profile.getInstance().goals
+            for (GoalHelperClass goal : Profile.getInstance().goals
             ) {
                 Button button = new Button(_dialog.getContext());
-                button.setText(goal.name);
+                button.setText(goal.getName());
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Toast.makeText(HomeActivity.this, "Added to " + action, Toast.LENGTH_SHORT).show();
-                        //goal.contents.add(_currentContent);
+                        Profile.getInstance().getReference().child("categories").child(goal.getGoalID()).child("contents").child(_currentContent.getContentID()).setValue(_currentContent.getContentID());
+                        _dialog.dismiss();
+                        Toast.makeText(HomeActivity.this, "Added to "+goal.getName(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 scroller.addView(button);
@@ -460,8 +461,9 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                     public void onClick(View v) {
 
                         Profile.getInstance().getReference().child("categories").child(category.getCategoryID()).child("contents").child(_currentContent.getContentID()).setValue(_currentContent.getContentID());
-
+                        _dialog.dismiss();
                         Toast.makeText(HomeActivity.this, "Added to "+category.getName(), Toast.LENGTH_SHORT).show();
+
 
                     }
                 });
@@ -518,8 +520,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 } else if (description.equals("")) {
                     Toast.makeText(HomeActivity.this, "enter a description ", Toast.LENGTH_SHORT).show();
                 } else {
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(Profile.getInstance().username);
-                    String categoryID = databaseReference.push().getKey();
+                    String categoryID = Profile.getInstance().getReference().push().getKey();
 
                     CategoryHelperClass newCategory = new CategoryHelperClass(categoryID,name,description);
                     Profile.getInstance().getReference().child("categories").child(categoryID).setValue(newCategory);
@@ -557,15 +558,24 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String name = edtName.getText().toString();
-                String description = edtDescription.getText().toString();
+                String name = edtName.getText().toString().trim();
+                String description = edtDescription.getText().toString().trim();
                 if (name.equals("")) {
                     Toast.makeText(HomeActivity.this, "enter a name ", Toast.LENGTH_SHORT).show();
                 } else if (description.equals("")) {
                     Toast.makeText(HomeActivity.this, "enter a description ", Toast.LENGTH_SHORT).show();
                 } else {
-                    //Category category = new Category(name, description, Color.valueOf(0x7FFF62), R.mipmap.rocket);
-                    //Profile.getInstance().categories.add(category);
+
+                    String goalID = Profile.getInstance().getReference().push().getKey();
+
+                   GoalHelperClass newCategory = new GoalHelperClass(goalID,name,0f);
+                    Profile.getInstance().getReference().child("goals").child(goalID).setValue(newCategory);
+
+                    Profile.getInstance().getReference().child("goals").child(goalID).child("contents").child(_currentContent.contentID).setValue(_currentContent.contentID);
+
+
+                    Toast.makeText(HomeActivity.this, "Added to new Goal", Toast.LENGTH_SHORT).show();
+
                     _dialog.dismiss();
                 }
             }

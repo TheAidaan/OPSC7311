@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
@@ -55,7 +56,7 @@ public class ProfileActivity extends MainLayout {
 
 
         TextView helloUser = findViewById(R.id.txtHelloUser_Profile);
-        helloUser.setText("Hello \n" + Profile.getInstance().name);
+        helloUser.setText("Hello\n" + Profile.getInstance().name);
 
         ImageButton btnSettings = findViewById(R.id.btnSettings_ProfilePage);
         btnSettings.setOnClickListener(new View.OnClickListener()
@@ -67,12 +68,11 @@ public class ProfileActivity extends MainLayout {
             }
         });
 
-
-        LoadGoalStack();
+       LoadGoalStack();
        LoadCategories();
     }
     void LoadGoalStack(){
-        GoalStackAdapter adapter = new GoalStackAdapter(Profile.getInstance().goals,
+        GoalStackAdapter adapter = new GoalStackAdapter(Profile.getInstance().getGoals(),
         R.layout.goal_stack,ProfileActivity.this);
         _stackView.setAdapter(adapter);
 
@@ -83,7 +83,6 @@ public class ProfileActivity extends MainLayout {
         int i=0;
         for (CategoryHelperClass category : Profile.getInstance().getCategories())
         {
-
             i++;
 
             View view = CreateCategoryFolder(row);
@@ -107,18 +106,18 @@ public class ProfileActivity extends MainLayout {
                     OpenCategoryFolder(category);
                 }
             });
-            if (i%2==0)
-            {
+            if (i%2==0) {
                 _layout.addView(row);
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)view.getLayoutParams();
-                params.setMargins(60,0,30,5);
-                row  = new TableRow(this);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+                params.setMargins(15, 15, 15, 15);
+                row = new TableRow(this);
+
             }else{
                 if (Profile.getInstance().getCategories().size() == i){
                     _layout.addView(row);
                 }else{
                     LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)view.getLayoutParams();
-                    params.setMargins(30,0,60,5);
+                    params.setMargins(72,15,15,15);
                 }
             }
 
@@ -131,7 +130,7 @@ public class ProfileActivity extends MainLayout {
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)stub.getLayoutParams();
         params.height = 485;
-        params.width = 535;
+        params.width = 550;
 
         stub.setLayoutResource(R.layout.category_folder);
         View inflated = stub.inflate();
@@ -144,6 +143,7 @@ public class ProfileActivity extends MainLayout {
     void OpenCategoryFolder(CategoryHelperClass category) {
         _dialog.setContentView(R.layout.open_category_folder);
         LinearLayout layout = _dialog.findViewById(R.id.llContents_open_category_popup_menu);
+
         Profile.getInstance().getReference().child("categories").child(category.categoryID).child("contents").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
