@@ -49,6 +49,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,34 +81,14 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         _dialog = new Dialog(this);
         _storageReference = FirebaseStorage.getInstance().getReference("uploads");
         _databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
-
-
-        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if(result.getResultCode() == RESULT_OK && result.getData() != null){
-                    Uri test = result.getData().getData();
-                    //UploadFile("test", "test te test test", test);
-                    //ImageView image = findViewById(R.id.imgTest);
-                    //image.setImageURI(test);
-                    //Toast.makeText(HomeActivity.this, "Done", Toast.LENGTH_SHORT).show();
-
-
-                    //Bundle bundle = result.getData().getExtras();
-                    //Bitmap bitmap  = (Bitmap) bundle.get("data");
-                   // CapturePicture(bitmap);
-                }
-            }
-        });
-
-        lay = findViewById(R.id.tblScroll_home);
-        _btnCamera = findViewById(R.id.btn_close_view_popup_menu);
+        ImageView image = findViewById(R.id.imgTest);
 
         if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.CAMERA)!=
                 PackageManager.PERMISSION_GRANTED){
             requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
         }
 
+        _btnCamera = findViewById(R.id.btn_close_view_popup_menu);
         _btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,71 +97,40 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
             }
         });
 
-        //LoadContent();
-
-    }
-
-    String getFileExtension(Uri uri){
-        ContentResolver cr = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-
-        return mime.getExtensionFromMimeType(cr.getType(uri));
-    }
-
-    void UploadFile(String name, String description, Uri UploadUri){
-
-        StorageReference fileReference = _storageReference.child(System.currentTimeMillis() + "."+ getFileExtension(UploadUri));
-        fileReference.putFile(UploadUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        ContentUploadHelperClass upload = new ContentUploadHelperClass(name, description,uri.toString(),false);
-                        String uploadID = _databaseReference.push().getKey();
-                        _databaseReference.child(uploadID).setValue(upload);
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == RESULT_OK && result.getData() != null){
+                    Bundle test = result.getData().getExtras();
+                    Bitmap bitmap = (Bitmap)test.get("data");
+                    //Uri uri =result.getData().getData().normalizeScheme();
 
-                        Toast.makeText(HomeActivity.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                    //image.setImageURI(uri);
+                    //image.setImageBitmap(bitmap);
 
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(HomeActivity.this, "Upload was Unsuccessful", Toast.LENGTH_SHORT).show();
+                    ByteArrayOutputStream bytes =new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG,100,bytes);
+                    String path = MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(),bitmap,"val",null);
+                    Uri uri = Uri.parse(path);
+                    image.setImageURI(uri);
 
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                //la la la la
-            }
-        });
+                    //Picasso.get().load(uri).into(image);
+                    //Toast.makeText(HomeActivity.this, "Done", Toast.LENGTH_SHORT).show();
 
-    }
 
-    void LoadContent(){
-        List<ContentUploadHelperClass> uploads = new ArrayList<ContentUploadHelperClass>();
-        _databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for( DataSnapshot postSnapchat : snapshot.getChildren() ){
-                    ContentUploadHelperClass upload = postSnapchat.getValue(ContentUploadHelperClass.class);
-                    uploads.add(upload);
+                    //Bundle bundle = result.getData().getExtras();
+                    //Bitmap bitmap  = (Bitmap) bundle.get("data");
+                   // CapturePicture(bitmap);
                 }
-                ArrangeContents(uploads);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            } // Camera
         });
 
+        lay = findViewById(R.id.tblScroll_home);
+
+        LoadContent();
+
     }
-
-
+    // upload a captured image
     void CapturePicture(Bitmap bitmap){
         _dialog.dismiss();
         _dialog.setContentView(R.layout.capture_image);
@@ -208,7 +159,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 if (title.equals("") || description.equals("")){
                     Toast.makeText(HomeActivity.this, "Please provide a title and a description", Toast.LENGTH_SHORT).show();
                 }else {
-                    Content newContent = new Content(title, "A place in stellenbosch to climb a tree", bitmap);
+                    Content newContent = new Content(title, description, bitmap);
                     testContents.add(newContent);
                     _dialog.dismiss();
                     LoadContent();
@@ -219,10 +170,67 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         _dialog.show();
 
     }
+    void UploadFile(String name, String description, Uri UploadUri){
+        StorageReference fileReference = _storageReference.child(System.currentTimeMillis() + "."+ getFileExtension(UploadUri));
+        fileReference.putFile(UploadUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String uploadID = _databaseReference.push().getKey();
+                        ContentUploadHelperClass upload = new ContentUploadHelperClass(uploadID,name, description,uri.toString(),false);
+                        _databaseReference.child(uploadID).setValue(upload);
 
+                        Toast.makeText(HomeActivity.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(HomeActivity.this, "Upload was Unsuccessful", Toast.LENGTH_SHORT).show();
+
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                //la la la la
+            }
+        });
+
+    }
+    String getFileExtension(Uri uri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+    //end of uploading a picture from captured image
+
+    //load content
+    void LoadContent(){
+        List<ContentUploadHelperClass> uploads = new ArrayList<ContentUploadHelperClass>();
+        _databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for( DataSnapshot postSnapchat : snapshot.getChildren() ){
+                    ContentUploadHelperClass upload = postSnapchat.getValue(ContentUploadHelperClass.class);
+                    uploads.add(upload);
+                }
+                ArrangeContents(uploads);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
     void ArrangeContents(List<ContentUploadHelperClass> contents) {
-        Toast.makeText(HomeActivity.this, "now its here", Toast.LENGTH_SHORT).show();
 
         lay.removeAllViews();
         TableRow row = new TableRow(this);
@@ -262,8 +270,6 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         Picasso.get().load(content.getImageUrl()).into(button);
 
-        //button.setImageResource(content.imageID);
-
         button.setBackgroundColor(517782);
 
         button.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -278,7 +284,9 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         return row;
     }
 
+    //end of load content
 
+    //clicking on a content
     void ShowSlider(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(this);
@@ -286,6 +294,26 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         popup.show();
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1://save to category
+                ShowSavePopUp("Category");
+                return true;
+            case R.id.item2://add to goal
+                ShowSavePopUp("Goal");
+                return true;
+            default:
+                ShowViewPopUp();
+                return false;
+
+        }
+    }
+
+    //end of clicking on content
+
+
+    //popups
     void ShowViewPopUp() {
 
         _dialog.dismiss();
@@ -345,6 +373,41 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         LinearLayout scroller = _dialog.findViewById(R.id.llScroll_save_popup_menu);
 
         if (action.equals("Goal")) {
+
+            if(Profile.getInstance().getCategories().size()==0)
+                txtTodo.setText("Please create a category first");
+            else
+                txtTodo.setText("Select a " + action);
+
+
+            btnView = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
+            btnView.setImageResource(R.mipmap.eye);
+
+
+            btnView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowViewPopUp();
+                }
+            });
+
+            ImageView btnCategory = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
+            btnCategory.setImageResource(R.mipmap.pushpin);
+            btnCategory.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    ShowSavePopUp("Category");
+                }
+            });
+            btnAdd.setImageResource(R.mipmap.target);
+
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    _dialog.dismiss();
+                    AddGoalForm();
+                }
+            });
+
             for (Goal goal : Profile.getInstance().goals
             ) {
                 Button button = new Button(_dialog.getContext());
@@ -355,67 +418,31 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                         //goal.contents.add(_currentContent);
                     }
                 });
-                btnView = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
-                btnView.setImageResource(R.mipmap.eye);
-
-
-                btnView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ShowViewPopUp();
-                    }
-                });
-
-                ImageView btnCategory = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
-                btnCategory.setImageResource(R.mipmap.pushpin);
-                btnCategory.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        ShowSavePopUp("Category");
-                    }
-                });
-                btnAdd.setImageResource(R.mipmap.target);
                 scroller.addView(button);
-
             }
+        } else {
+            if(Profile.getInstance().getCategories().size()==0)
+                txtTodo.setText("Please create a category first");
+            else
+                txtTodo.setText("Select a " + action);
 
-            btnAdd.setOnClickListener(new View.OnClickListener() {
+            btnView = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
+            btnView.setImageResource(R.mipmap.eye);
+            btnView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    _dialog.dismiss();
-                    AddGoalForm();
+                    ShowViewPopUp();
                 }
             });
-        } else {
-            for (Category category : Profile.getInstance().categories
-            ) {
-                Button button = new Button(_dialog.getContext());
-                button.setText(category.name);
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Toast.makeText(HomeActivity.this, "Added to " + action, Toast.LENGTH_SHORT).show();
-                        //category.contents.add(_currentContent);
-                    }
-                });
-                btnView = _dialog.findViewById(R.id.btnAddToCat_view_popup_menu);
-                btnView.setImageResource(R.mipmap.eye);
-                btnView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ShowViewPopUp();
-                    }
-                });
 
-                btnAdd.setImageResource(R.mipmap.pushpin);
-                ImageView btnGoal = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
-                btnGoal.setImageResource(R.mipmap.target);
-                btnGoal.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        ShowSavePopUp("Goal");
-                    }
-                });
-                scroller.addView(button);
-            }
-
+            btnAdd.setImageResource(R.mipmap.pushpin);
+            ImageView btnGoal = _dialog.findViewById(R.id.btnAddToGoal_view_popup_menu);
+            btnGoal.setImageResource(R.mipmap.target);
+            btnGoal.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    ShowSavePopUp("Goal");
+                }
+            });
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -424,6 +451,23 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
                 }
             });
+
+            for (CategoryHelperClass category : Profile.getInstance().getCategories()
+            ) {
+                Button button = new Button(_dialog.getContext());
+                button.setText(category.getName());
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        Profile.getInstance().getReference().child("categories").child(category.getCategoryID()).child("contents").child(_currentContent.getContentID()).setValue(_currentContent.getContentID());
+
+                        Toast.makeText(HomeActivity.this, "Added to "+category.getName(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                scroller.addView(button);
+            }
+
         }
 
 
@@ -432,7 +476,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         txtDescription.setText(_currentContent.description);
         txtContentName.setText(_currentContent.name);
 
-        txtTodo.setText("Select a " + action);
+
         txtTitle.setText("Add to " + action);
 
         btnClose.setOnClickListener(new View.OnClickListener() {
@@ -446,8 +490,10 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
         _dialog.show();
     }
 
+    //end of popups
+
     void AddCategoryForm() {
-        //Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(this);
         _dialog.setContentView(R.layout.add_category_form);
 
 
@@ -465,16 +511,24 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String name = edtName.getText().toString();
-                String description = edtDescription.getText().toString();
+                String name = edtName.getText().toString().trim();
+                String description = edtDescription.getText().toString().trim();
                 if (name.equals("")) {
                     Toast.makeText(HomeActivity.this, "enter a name ", Toast.LENGTH_SHORT).show();
                 } else if (description.equals("")) {
                     Toast.makeText(HomeActivity.this, "enter a description ", Toast.LENGTH_SHORT).show();
                 } else {
-                    Category category = new Category(name, description, Color.valueOf(0x7FFF62), R.mipmap.rocket);
-                    //category.contents.add(_currentContent);
-                    Profile.getInstance().categories.add(category);
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(Profile.getInstance().username);
+                    String categoryID = databaseReference.push().getKey();
+
+                    CategoryHelperClass newCategory = new CategoryHelperClass(categoryID,name,description);
+                    Profile.getInstance().getReference().child("categories").child(categoryID).setValue(newCategory);
+
+                    Profile.getInstance().getReference().child("categories").child(categoryID).child("contents").child(_currentContent.contentID).setValue(_currentContent.contentID);
+
+
+                    Toast.makeText(HomeActivity.this, "Added to new Category", Toast.LENGTH_SHORT).show();
+
                     _dialog.dismiss();
                 }
             }
@@ -510,8 +564,8 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
                 } else if (description.equals("")) {
                     Toast.makeText(HomeActivity.this, "enter a description ", Toast.LENGTH_SHORT).show();
                 } else {
-                    Category category = new Category(name, description, Color.valueOf(0x7FFF62), R.mipmap.rocket);
-                    Profile.getInstance().categories.add(category);
+                    //Category category = new Category(name, description, Color.valueOf(0x7FFF62), R.mipmap.rocket);
+                    //Profile.getInstance().categories.add(category);
                     _dialog.dismiss();
                 }
             }
@@ -521,21 +575,7 @@ public class HomeActivity extends MainLayout implements PopupMenu.OnMenuItemClic
 
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item1://save to category
-                ShowSavePopUp("Category");
-                return true;
-            case R.id.item2://add to goal
-                ShowSavePopUp("Goal");
-                return true;
-            default:
-                ShowViewPopUp();
-                return false;
 
-        }
-    }
 
 
 }

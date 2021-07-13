@@ -1,6 +1,8 @@
 package com.example.opsc7311;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 
@@ -19,6 +21,18 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class ProfileActivity extends MainLayout {
@@ -55,7 +69,7 @@ public class ProfileActivity extends MainLayout {
 
 
         LoadGoalStack();
-        LoadCategories();
+       LoadCategories();
     }
     void LoadGoalStack(){
         GoalStackAdapter adapter = new GoalStackAdapter(Profile.getInstance().goals,
@@ -67,9 +81,9 @@ public class ProfileActivity extends MainLayout {
 
         TableRow row = new TableRow(this);
         int i=0;
-        for (Category category: Profile.getInstance().categories
-             )
+        for (CategoryHelperClass category : Profile.getInstance().getCategories())
         {
+
             i++;
 
             View view = CreateCategoryFolder(row);
@@ -82,9 +96,9 @@ public class ProfileActivity extends MainLayout {
 
             ConstraintLayout folder = view.findViewById(R.id.category_folder);
 
-            txtTitle.setText(category.name);
-            imgIcon.setImageResource(category.iconId);
-            txtProgress.setText("0/"+category.contents.size());
+            txtTitle.setText(category.getName());
+            //imgIcon.setImageResource(category.iconId);
+            //txtProgress.setText("0/"+category.contents.size());
 
             folder.setOnClickListener(new View.OnClickListener()
             {
@@ -100,7 +114,7 @@ public class ProfileActivity extends MainLayout {
                 params.setMargins(60,0,30,5);
                 row  = new TableRow(this);
             }else{
-                if (Profile.getInstance().categories.size() == i){
+                if (Profile.getInstance().getCategories().size() == i){
                     _layout.addView(row);
                 }else{
                     LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)view.getLayoutParams();
@@ -127,37 +141,64 @@ public class ProfileActivity extends MainLayout {
         return inflated;
     }
 
-    void OpenCategoryFolder(Category category){
+    void OpenCategoryFolder(CategoryHelperClass category) {
         _dialog.setContentView(R.layout.open_category_folder);
-        LinearLayout layout =_dialog.findViewById(R.id.llContents_open_category_popup_menu);
-
-        for (Content content:
-                category.contents
-             ) {
-            ImageView image = new ImageView(this);
-            image.setImageBitmap(content.image);
-            layout.addView(image);
-            image.setLayoutParams(new LinearLayout.LayoutParams(1120, 850));
-            Toast.makeText(this, "done" , Toast.LENGTH_SHORT).show();
-        }
-        TextView txtTitle = _dialog.findViewById(R.id.txtTitle_open_category_popup_menu);
-        TextView txtDescription = _dialog.findViewById(R.id.txtDescription_open_category_popup_menu);
-        txtDescription.setText(category.description);
-
-        txtTitle.setText(category.name);
-         ImageView btnClose = _dialog.findViewById(R.id.btn_close_open_category_popup_menu);
-        btnClose.setOnClickListener(new View.OnClickListener()
-        {
+        LinearLayout layout = _dialog.findViewById(R.id.llContents_open_category_popup_menu);
+        Profile.getInstance().getReference().child("categories").child(category.categoryID).child("contents").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                _dialog.dismiss();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> contentDownloadLinks = new ArrayList<String>();
+
+                for (DataSnapshot postSnapchat : snapshot.getChildren()) {
+                    String contentID = postSnapchat.getValue(String.class);
+
+                    FirebaseDatabase.getInstance().getReference("uploads").child(contentID).addValueEventListener(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot contentSnapshot) {
+
+                            ContentUploadHelperClass content = contentSnapshot.getValue(ContentUploadHelperClass.class);
+                            contentDownloadLinks.add(content.imageUrl);
+                            Toast.makeText(ProfileActivity.this, content.imageUrl, Toast.LENGTH_SHORT).show();
+                            ImageView image = new ImageView(ProfileActivity.this);
+                            Picasso.get().load(content.imageUrl).into(image);
+                            layout.addView(image);
+                            image.setLayoutParams(new LinearLayout.LayoutParams(1120, 850));
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-        _dialog.show();
-    }
+            TextView txtTitle = _dialog.findViewById(R.id.txtTitle_open_category_popup_menu);
+            TextView txtDescription = _dialog.findViewById(R.id.txtDescription_open_category_popup_menu);
+            txtDescription.setText(category.description);
+
+            txtTitle.setText(category.name);
+            ImageView btnClose = _dialog.findViewById(R.id.btn_close_open_category_popup_menu);
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    _dialog.dismiss();
+
+                }
+            });
+
+            _dialog.show();
+        }
 
 
 
- }
+}

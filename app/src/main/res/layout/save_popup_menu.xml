@@ -5,6 +5,7 @@
     android:layout_height="520dp"
     android:layout_gravity="center"
     android:background="@color/material_on_background_disabled"
+    android:backgroundTint="@color/material_on_background_disabled"
     android:orientation="vertical"
     android:padding="15dp">
 
@@ -37,7 +38,7 @@
                 android:layout_width="151dp"
                 android:layout_height="109dp"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter" />
 
             <LinearLayout
                 android:layout_width="140dp"

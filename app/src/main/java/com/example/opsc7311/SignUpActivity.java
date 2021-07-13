@@ -56,7 +56,6 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                _email="k";
                 _name = _txtLName.getEditText().getText().toString().trim();
                 _username = _txtLUsername.getEditText().getText().toString().trim();
                 _email = _txtLEmail.getEditText().getText().toString().trim();
@@ -72,9 +71,8 @@ public class SignUpActivity extends AppCompatActivity {
                     Profile.getInstance().setUsername(_name);
                     Profile.getInstance().setEmail(_email);
                     Profile.getInstance().setPassword(_password);
+                    Profile.getInstance().setReference( rootNode.getReference("users").child(_username));
 
-                    Toast myToast = Toast.makeText(SignUpActivity.this, "I'm a toast!", Toast.LENGTH_LONG);
-                    myToast.show();
 
                     Intent intent= new Intent(SignUpActivity.this,HomeActivity.class);
                     startActivity(intent);

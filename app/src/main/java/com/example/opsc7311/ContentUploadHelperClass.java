@@ -1,17 +1,26 @@
 package com.example.opsc7311;
 
 public class ContentUploadHelperClass {
-    String name,description,imageUrl;
+    String contentID,name,description,imageUrl;
     Boolean checkedIn;
 
     public ContentUploadHelperClass() {
     }
 
-    public ContentUploadHelperClass(String name, String description, String imageUrl, Boolean checkedIn) {
+    public ContentUploadHelperClass(String contentID, String name, String description, String imageUrl, Boolean checkedIn) {
+        this.contentID = contentID;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
         this.checkedIn = checkedIn;
+    }
+
+    public String getContentID() {
+        return contentID;
+    }
+
+    public void setContentID(String contentID) {
+        this.contentID = contentID;
     }
 
     public String getName() {

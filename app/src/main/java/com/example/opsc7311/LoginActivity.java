@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -21,10 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoginActivity extends AppCompatActivity {
     TextInputLayout _txtLUsername,_txtLPassword;
     Button _btnLogin;
-    TextView _txtIncorrectInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +84,48 @@ public class LoginActivity extends AppCompatActivity {
                         String databaseUsername = snapshot.child(enteredUsername).child("username").getValue(String.class);
                         String databaseEmail = snapshot.child(enteredUsername).child("email").getValue(String.class);
 
+
                         Profile.getInstance().setName(databaseName);
                         Profile.getInstance().setUsername(databaseUsername);
                         Profile.getInstance().setEmail(databaseEmail);
                         Profile.getInstance().setPassword(enteredPassword);
+                        Profile.getInstance().setReference(FirebaseDatabase.getInstance().getReference("users").child(enteredUsername));
 
-                        CreateTestValues();
+
+                        Profile.getInstance().getReference().child("categories").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Profile.getInstance().getCategories().clear();
+                                for( DataSnapshot postSnapchat : snapshot.getChildren() ){
+                                    CategoryHelperClass category = postSnapchat.getValue(CategoryHelperClass.class);
+                                    Profile.getInstance().getCategories().add(category);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
+                        Profile.getInstance().getReference().child("goals").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                /*Profile.getInstance().getCategories().clear();
+                                for( DataSnapshot postSnapchat : snapshot.getChildren() ){
+                                    CategoryHelperClass category = postSnapchat.getValue(CategoryHelperClass.class);
+                                    Profile.getInstance().getCategories().add(category);
+                                }*/
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intent);
@@ -109,27 +148,5 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    void CreateTestValues(){
-
-            // test values
-
-            Drawable drawable = getResources().getDrawable(R.drawable.test1);
-            Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-            Content Testcontent4 = new Content("Injury", "I got hurt here", bitmap);
-            drawable = getResources().getDrawable(R.drawable.test4);
-            bitmap = ((BitmapDrawable)drawable).getBitmap();
-            Content Testcontent5 = new Content("N1", "driver", bitmap);
-
-            Goal goal = new Goal("eastSide", Color.valueOf(0xFFAB1E));
-            goal.contents.add(Testcontent4);
-            Category category = new Category("cape town", "place to go when i see it", Color.valueOf(0xBC62FF), R.mipmap.sun);
-            category.contents.add(Testcontent5);
-
-            Profile.getInstance().goals.add(goal);
-            Profile.getInstance().categories.add(category);
-            //
-
     }
 }
