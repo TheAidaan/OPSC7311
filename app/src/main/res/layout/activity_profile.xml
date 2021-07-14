@@ -7,7 +7,7 @@
     android:background="#517782"
     tools:context=".ProfileActivity">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,16 +19,14 @@
 
         <StackView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/stkView_profile"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-
             />
 
 
-    </FrameLayout>
+    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scroll_profile"

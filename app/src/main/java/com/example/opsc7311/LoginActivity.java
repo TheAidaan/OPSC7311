@@ -109,14 +109,15 @@ public class LoginActivity extends AppCompatActivity {
                         });
 
 
+
                         Profile.getInstance().getReference().child("goals").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Profile.getInstance().getGoals().clear();
+                                /*Profile.getInstance().getCategories().clear();
                                 for( DataSnapshot postSnapchat : snapshot.getChildren() ){
-                                    GoalHelperClass goal = postSnapchat.getValue(GoalHelperClass.class);
-                                    Profile.getInstance().getGoals().add(goal);
-                                }
+                                    CategoryHelperClass category = postSnapchat.getValue(CategoryHelperClass.class);
+                                    Profile.getInstance().getCategories().add(category);
+                                }*/
 
                             }
 

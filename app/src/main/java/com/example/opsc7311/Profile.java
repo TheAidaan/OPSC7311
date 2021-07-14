@@ -27,7 +27,7 @@ public class Profile {
     DatabaseReference reference;
 
     List<CategoryHelperClass> categories = new ArrayList<CategoryHelperClass>();
-    public List<GoalHelperClass> goals = new ArrayList<GoalHelperClass>();
+    public List<Goal> goals = new ArrayList<Goal>();
 
     public static void setInstance(Profile instance) {
         Profile.instance = instance;
@@ -86,11 +86,11 @@ public class Profile {
         this.categories.add(category);
     }
 
-    public List<GoalHelperClass> getGoals() {
+    public List<Goal> getGoals() {
         return goals;
     }
 
-    public void setGoals(List<GoalHelperClass> goals) {
+    public void setGoals(List<Goal> goals) {
         this.goals = goals;
     }
 }
